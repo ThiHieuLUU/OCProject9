@@ -1,0 +1,22 @@
+{% extends 'reviews/header.html' %}
+{% block content %}
+	<button><a href="{% url 'reviews:ticket-create' %}">Créer un ticket</a></button>
+	<button><a href="{% url 'reviews:review-create' %}">Demander une critique</a></button>
+
+	<div class="container py-5">
+	<h1>Liste de tickets/critiques les plus récents</h1>
+	<h2>Je suis {{user}}</h2>
+	<h2>Je suis les utilisateurs : {{user.following.all}}</h2>
+
+	{% for post in posts %}
+		{% if post.content_type == 'TICKET' %}
+			{% include 'reviews/includes/ticket_snippet.html' %}
+		{% elif post.content_type == 'REVIEW' %}
+			{% include 'reviews/includes/review_snippet.html' %}
+		{% endif %}
+		</br>
+		</br>
+
+	{% endfor %}
+	</div>
+{% endblock %}

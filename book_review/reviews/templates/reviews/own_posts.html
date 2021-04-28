@@ -1,0 +1,20 @@
+{% extends 'reviews/header.html' %}
+{% block content %}
+	<div class="container py-5">
+
+			<h1>Liste de mes posts</h1>
+			{% for post in posts %}
+				<div class="border border-primary">
+					{% if post.content_type == 'TICKET' %}
+						{% include 'reviews/includes/ticket_snippet.html' %}
+					{% elif post.content_type == 'REVIEW' %}
+						{% include 'reviews/includes/review_snippet.html' %}
+					{% endif %}
+					<button>Modifier</button>
+					<button>Supprimer</button>
+					</br>
+					</br>
+				</div>
+			{% endfor %}
+	</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'reviews/header.html' %}
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<!--Register-->
+<div class="container py-5 w-50">
+    <h2 class="text-center">Inscrivez-vous</h2>
+    <form method="POST" ALIGN='center'>
+        {% csrf_token %}
+        {{ register_form|crispy }}
+        <button><a href="{% url 'reviews:home' %}">Retourner</a></button>
+        <button>S'inscrire</button>
+        <!--		<button class="btn btn-primary" type="submit">Register</button>-->
+    </form>
+</div>
+
+{% endblock %}

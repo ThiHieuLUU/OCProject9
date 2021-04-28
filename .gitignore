@@ -1,0 +1,13 @@
+venv/
+main/__pycache__/*
+main/__pycache__/models.cpython-38.pyc
+main/__pycache__/views.cpython-38.pyc
+
+__pycache__/
+mysite/mysite/__pycache__
+mysite/mysite/main/__pycache__/
+mysite/mysite/main/management/
+mysite/mysite/main/migrations/__pycache__/
+mysite/mysite/users/__pycache__/
+mysite/mysite/users/management/
+mysite/mysite/users/migrations/__pycache__/

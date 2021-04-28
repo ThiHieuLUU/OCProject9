@@ -1,0 +1,13 @@
+{% extends 'reviews/header.html' %}
+{% block content %}
+    <h1>Ticket créée par {{ object.user }}</h1>
+    <p> Vous avez publié :</p>
+    {{ form.media }}
+    <h1>{{ object.title }}</h1>
+    <p>{{ object.description }}</p>
+    <img src="{{object.image.url}}">
+    <br/>
+    <br/>
+    {{object.body|safe}}
+    <button>Créer une critique </button>
+{% endblock %}

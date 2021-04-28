@@ -1,0 +1,26 @@
+{% extends 'reviews/header.html' %}
+{% block content %}
+
+{% load crispy_forms_tags %}
+<!--Login-->
+<div class="container py-5">
+    <h2 class="text-center">Connectez-vous</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ login_form|crispy }}
+        <!--    <button class="btn btn-primary" type="submit">Se connecter</button>-->
+        <p class="text-center">
+            <button class="btn btn-primary" type="submit">Se connecter</button>
+        </p>
+
+
+    </form>
+</div>
+
+<div class="container py-5">
+    <h2 class="text-center">Inscrivez-vous reviewstenant</h2>
+    <p class="text-center">
+        <button><a href="{% url 'reviews:register' %}">S'inscrire</a></button>
+    </p>
+</div>
+{% endblock %}
