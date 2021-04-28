@@ -1,7 +1,7 @@
 {% extends 'reviews/header.html' %}
 {% block content %}
-	<button><a href="{% url 'reviews:ticket-create' %}">Créer un ticket</a></button>
-	<button><a href="{% url 'reviews:review-create' %}">Demander une critique</a></button>
+	<button><a href="{% url 'reviews:ticket-create' %}">Demander une critique</a></button>
+	<button><a href="{% url 'reviews:review-create' %}">Créer une critique</a></button>
 
 	<div class="container py-5">
 	<h1>Liste de tickets/critiques les plus récents</h1>

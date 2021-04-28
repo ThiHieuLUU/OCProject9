@@ -65,18 +65,6 @@ def logout_view(request):
     return redirect("reviews:home")
 
 
-def index(response, id):
-    user = response.user
-    # ls = Ticket.objects.get(id=id)
-    ls = user.Objects.tickets.all()
-
-    return render(response, "reviews/flux.html", {"ls": ls})
-
-
-def home(response):
-    return render(response, "reviews/home.html", {})
-
-
 def feed_view(request):
     reviews = get_users_viewable_reviews(request.user)
     # returns queryset of reviews
@@ -111,6 +99,29 @@ def own_posts_view(request):
         reverse=True
     )
     return render(request, "reviews/own_posts.html", context={'posts': posts})
+
+
+def user_follows_view(request):
+    # A regarder comment récupérer données
+    if request.method == "POST":
+        _user = request.user
+        _followed_user_name = request.POST.get("followed_user")
+        _followed_user = User.objects.get(username=_followed_user_name)
+        if _followed_user:
+            new_user_follows = UserFollows(user=_user, followed_user=_followed_user)
+            new_user_follows.save()
+            messages.success(request, "Le suivi est effectué.")
+            return redirect("reviews:user-follows")
+        else:
+            messages.error(request, "Le nom d'utilisateur n'existe pas")
+
+    form = UserFollowsModelForm()
+    user = request.user
+    following_users = get_following_users(user)
+    followed_users = get_followed_users(user)
+    context = {"following_users": following_users, "followed_users": followed_users, "form": form}
+    return render(request, "reviews/user_follows.html", context=context)
+
 
 
 class TicketCreateView(CreateView):

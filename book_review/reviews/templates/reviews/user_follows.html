@@ -1,0 +1,32 @@
+{% extends 'reviews/header.html' %}
+{% block content %}
+<!--	<form action="." method="post">-->
+<!--		{% csrf_token %}-->
+<!--    <label for="your_name">Your name: </label>-->
+<!--    <input id="your_name" type="text" name="your_name" value="{{ current_name }}">-->
+<!--    <input type="submit" value="OK">-->
+<!--	</form>-->
+
+	<h1>Je suis {{user}}</h1>
+	<form action='.' method='POST'>
+        {% csrf_token %}
+		<input type="text" name="followed_user" value="Nom d'utilisateur">
+        <input type='submit' value='Envoyer' />
+    </form>
+
+	<div class="container py-5">
+			<h1>Abonnements</h1>
+			{% for following_user in following_users %}
+				<ul>
+					<li>{{following_user}} <button>Désabonner</button></li>
+				</ul>
+			{% endfor %}
+			<h1>Abonnés</h1>
+			{% for followed_user in followed_users %}
+				<ul>
+					<li>{{followed_user}}</li>
+				</ul>
+			{% endfor %}
+
+	</div>
+{% endblock %}

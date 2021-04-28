@@ -7,9 +7,9 @@
                 <p>Vous avez publié une critique pour répondre à ticket : {{post.ticket.title}} de {{post.ticket.user}}, {{post.time_created}}</p>
             {% endif %}
         {% else %}
-            <p>{{post.user}} avez publié une critique pour répondre au ticket {{post.ticket.title}} de {{post.ticket.user}}, {{post.time_created}}</p>
+            <p>{{post.user}} a publié une critique pour répondre au ticket {{post.ticket.title}} de {{post.ticket.user}}, {{post.time_created}}</p>
         {% endif %}
-        <p>{{post.headline}}</p>
+        <p>{{post.headline}} - Note : {{post.rating}}</p>
         <p>{{post.body}}</p>
          <div class="border">
             <p>Ticket de {{post.ticket.user}}</p>

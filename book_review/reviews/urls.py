@@ -9,7 +9,7 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     # path("flux/", views.flux_view, name="flux"),
     path("flux/", views.feed_view, name="flux"),
-    path("<int:id>", views.index, name="index"),
+    # path("<int:id>", views.index, name="index"),
 
 
 
@@ -21,5 +21,6 @@ urlpatterns = [
     path('reviews/create/', views.ReviewCreateView.as_view(), name='review-create'),
 
     path("own_posts/", views.own_posts_view, name="own-posts"),
+    path("user_follows/", views.user_follows_view, name="user-follows"),
 
 ]

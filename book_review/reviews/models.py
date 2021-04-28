@@ -62,13 +62,13 @@ class UserFollows(models.Model):
     followed_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                       related_name='followed_by')
 
-    def __str__(self):
-        return f'{self.user} follows {self.followed_user}'
-
     class Meta:
         # ensures we don't get multiple UserFollows instances
         # for unique user-user_followed pairs
         unique_together = ('user', 'followed_user', )
+
+    def __str__(self):
+        return f'{self.user} follows {self.followed_user}'
 
 
 def get_tickets_created_by_user(user):
@@ -116,6 +116,20 @@ def get_users_viewable_reviews(user):
 
 def get_users_viewable_tickets(user):
     return get_tickets_created_by_user(user) | get_tickets_created_by_following_user(user)
+
+
+def get_following_users(user):
+    following_users = [user_follow.followed_user for user_follow in user.following.all()]
+    return following_users
+
+
+def get_followed_users(user):
+    followed_users = [user_follow.user for user_follow in user.followed_by.all()]
+    return followed_users
+
+
+
+
 
 
 

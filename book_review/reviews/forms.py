@@ -3,11 +3,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 # from django.forms import ModelForm, TextInput, EmailInput
-from .models import Ticket, Review #, UserFollows
+from .models import Ticket, Review, UserFollows
 
 
 class NewUserForm(UserCreationForm):
-
     class Meta:
         model = User
         fields = ("username", "password1", "password2")
@@ -75,17 +74,24 @@ class ReviewModelForm(forms.ModelForm):
         required=False,
         widget=forms.Textarea(
             attrs={
-                "placeholder": "Your description",
                 "class": "new-class-name two",
                 "id": "my-id-for-textarea",
-                "rows": 20,
-                'cols': 120
+                "rows": 10,
+                'cols': 50,
             }
         )
     )
 
-
     class Meta:
         model = Review
-        fields = ["headline", "body", "rating"]
+        fields = ["ticket", "headline", "body", "rating"]
 
+
+class UserFollowsModelForm(forms.ModelForm):
+    class Meta:
+        model = UserFollows
+        fields = ["followed_user"]
+
+    def __init__(self, *args, **kwargs):
+        super(UserFollowsModelForm, self).__init__(*args, **kwargs)
+        self.base_fields["followed_user"].widget.attrs['placeholder'] = 'Nom d\'utilisateur'

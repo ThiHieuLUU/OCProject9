@@ -9,5 +9,8 @@
         <p>{{post.title}}</p>
         <p>{{post.description}}</p>
         <img src="{{post.image.url}}">
+        {% if not post.reviews.all %}
+            <button><a href="{% url 'reviews:review-create' %}">Créer une critique</a></button>
+        {% endif %}
     </div>
 </div>
