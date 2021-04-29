@@ -10,23 +10,23 @@
 	<h1>Je suis {{user}}</h1>
 	<form action='.' method='POST'>
         {% csrf_token %}
-		<input type="text" name="followed_user" value="Nom d'utilisateur">
+		<input type="text" name="will_follow_user" value="Nom d'utilisateur">
         <input type='submit' value='Envoyer' />
-    </form>
 
-	<div class="container py-5">
+		<div class="container py-5">
 			<h1>Abonnements</h1>
 			{% for following_user in following_users %}
-				<ul>
-					<li>{{following_user}} <button>Désabonner</button></li>
-				</ul>
+			<ul>
+				<li>{{following_user}} <button type="submit" name="unfollow" value='{{following_user}}'>Desabonner</button></li>
+			</ul>
 			{% endfor %}
 			<h1>Abonnés</h1>
 			{% for followed_user in followed_users %}
-				<ul>
-					<li>{{followed_user}}</li>
-				</ul>
+			<ul>
+				<li>{{followed_user}}</li>
+			</ul>
 			{% endfor %}
 
-	</div>
+		</div>
+	</form>
 {% endblock %}

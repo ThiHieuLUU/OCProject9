@@ -3,6 +3,8 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.core.exceptions import ObjectDoesNotExist
+
 # django.contrib.auth.models.User
 
 """ An user:
@@ -69,6 +71,19 @@ class UserFollows(models.Model):
 
     def __str__(self):
         return f'{self.user} follows {self.followed_user}'
+
+    @classmethod
+    def add_user_follows(cls, user, will_follow_user_name):
+        followed_user = User.objects.get(username=will_follow_user_name)
+        new_user_follows = cls(user=user, followed_user=followed_user)
+        new_user_follows.save()
+
+    @staticmethod
+    def delete_user_follows(user, followed_user_name):
+        all_user_follows = user.following.all()
+        followed_user_names = [obj.followed_user.username for obj in all_user_follows]
+        index = followed_user_names.index(followed_user_name)
+        all_user_follows[index].delete()
 
 
 def get_tickets_created_by_user(user):

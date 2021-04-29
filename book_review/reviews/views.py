@@ -13,11 +13,15 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from .forms import *
-from .models import *
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
+
 from django.contrib.auth.models import User
 from itertools import chain
 from django.db.models import CharField, Value
+
+from .forms import *
+from .models import *
 
 
 def home_view(request):
@@ -104,16 +108,29 @@ def own_posts_view(request):
 def user_follows_view(request):
     # A regarder comment récupérer données
     if request.method == "POST":
-        _user = request.user
-        _followed_user_name = request.POST.get("followed_user")
-        _followed_user = User.objects.get(username=_followed_user_name)
-        if _followed_user:
-            new_user_follows = UserFollows(user=_user, followed_user=_followed_user)
-            new_user_follows.save()
-            messages.success(request, "Le suivi est effectué.")
-            return redirect("reviews:user-follows")
-        else:
+        user = request.user
+        # followed_user_name = request.POST.get("followed_user")
+        # followed_user_name = request.POST.get("followed_user")
+        print(request.POST)
+        try:
+            if request.POST.get("will_follow_user") != "Nom d'utilisateur":
+                will_follow_user_name = request.POST.get("will_follow_user")
+                UserFollows.add_user_follows(user, will_follow_user_name)
+                messages.success(request, "Le suivi est effectué.")
+                return redirect("reviews:user-follows")
+        except ObjectDoesNotExist:
             messages.error(request, "Le nom d'utilisateur n'existe pas")
+        except IntegrityError:
+            messages.error(request, "Vous avez déjà suivi cet utilisateur")
+        else:
+            messages.error(request, "Erreur de demande de suivi")
+
+        if request.POST.get("unfollow"):
+            print("In Here")
+            followed_user_name = request.POST.get("unfollow")
+            UserFollows.delete_user_follows(user, followed_user_name)
+            messages.success(request, f"Vous avez désabonné le {followed_user_name}")
+            return redirect("reviews:user-follows")
 
     form = UserFollowsModelForm()
     user = request.user
@@ -121,7 +138,6 @@ def user_follows_view(request):
     followed_users = get_followed_users(user)
     context = {"following_users": following_users, "followed_users": followed_users, "form": form}
     return render(request, "reviews/user_follows.html", context=context)
-
 
 
 class TicketCreateView(CreateView):
