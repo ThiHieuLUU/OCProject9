@@ -102,6 +102,26 @@ def own_posts_view(request):
         key=lambda post: post.time_created,
         reverse=True
     )
+
+    if request.method == "POST":
+        if request.POST.get("deletePost"):
+            post_value = request.POST.get("deletePost")
+            print(post_value)
+            if "TICKET" in post_value:
+                _id = int(post_value[len("TICKET"):])  # The rest of string
+                title = request.user.tickets.get(id=_id).title
+                request.user.tickets.get(id=_id).delete()
+                messages.success(request, f"Vous avez supprimé la demande de critique {title}")
+            # WHY DON'T WORK ?
+            # if "REVIEW" in post_value:
+            #     _id = int(post_value[len("REVIEW"):])  # The rest of string
+            #     print("id =", _id)
+            #     # request.user.reviews.get(id=_id).delete()
+            #     ticket = request.user.reviews.all()[_id].ticket
+            #     request.user.reviews.all()[_id].delete()
+            #     messages.success(request, f"Vous avez supprimé la critique pour {ticket}")
+            # return redirect("reviews:own-posts")
+
     return render(request, "reviews/own_posts.html", context={'posts': posts})
 
 
@@ -109,9 +129,6 @@ def user_follows_view(request):
     # A regarder comment récupérer données
     if request.method == "POST":
         user = request.user
-        # followed_user_name = request.POST.get("followed_user")
-        # followed_user_name = request.POST.get("followed_user")
-        print(request.POST)
         try:
             if request.POST.get("will_follow_user") != "Nom d'utilisateur":
                 will_follow_user_name = request.POST.get("will_follow_user")
@@ -126,7 +143,6 @@ def user_follows_view(request):
             messages.error(request, "Erreur de demande de suivi")
 
         if request.POST.get("unfollow"):
-            print("In Here")
             followed_user_name = request.POST.get("unfollow")
             UserFollows.delete_user_follows(user, followed_user_name)
             messages.success(request, f"Vous avez désabonné le {followed_user_name}")

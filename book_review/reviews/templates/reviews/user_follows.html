@@ -1,12 +1,5 @@
 {% extends 'reviews/header.html' %}
 {% block content %}
-<!--	<form action="." method="post">-->
-<!--		{% csrf_token %}-->
-<!--    <label for="your_name">Your name: </label>-->
-<!--    <input id="your_name" type="text" name="your_name" value="{{ current_name }}">-->
-<!--    <input type="submit" value="OK">-->
-<!--	</form>-->
-
 	<h1>Je suis {{user}}</h1>
 	<form action='.' method='POST'>
         {% csrf_token %}

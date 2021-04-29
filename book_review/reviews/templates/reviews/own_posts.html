@@ -5,13 +5,17 @@
 			<h1>Liste de mes posts</h1>
 			{% for post in posts %}
 				<div class="border border-primary">
-					{% if post.content_type == 'TICKET' %}
-						{% include 'reviews/includes/ticket_snippet.html' %}
-					{% elif post.content_type == 'REVIEW' %}
-						{% include 'reviews/includes/review_snippet.html' %}
-					{% endif %}
-					<button>Modifier</button>
-					<button>Supprimer</button>
+					<form action='.' method='POST'>
+						{% csrf_token %}
+						{% if post.content_type == 'TICKET' %}
+							{% include 'reviews/includes/ticket_snippet.html' %}
+						{% elif post.content_type == 'REVIEW' %}
+							{% include 'reviews/includes/review_snippet.html' %}
+						{% endif %}
+						<button type="submit" name="deletePost" value='{{post.content_type}}{{post.id}}'>Supprimer</button>
+						<button>Modifier</button>
+					</form>
+<!--					<button>Supprimer</button>-->
 					</br>
 					</br>
 				</div>

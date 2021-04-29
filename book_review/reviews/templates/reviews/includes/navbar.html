@@ -12,7 +12,7 @@
         {% if user.is_authenticated %}
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">Flux</a>
+                <a class="nav-link" href="{% url 'reviews:flux' %}">Flux</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'reviews:own-posts' %}">Posts</a>
