@@ -52,7 +52,7 @@ class TicketModelForm(forms.ModelForm):
         required=False,
         widget=forms.Textarea(
             attrs={
-                "placeholder": "Your description",
+                # "placeholder": "Your description",
                 "class": "new-class-name two",
                 "id": "my-id-for-textarea",
                 "rows": 20,
@@ -65,12 +65,11 @@ class TicketModelForm(forms.ModelForm):
         model = Ticket
         fields = ["title", "description", "image"]
 
-
+# How to add TicketModelForm in ReviewModelForm  ???
 class ReviewModelForm(forms.ModelForm):
     headline = forms.CharField(label='Titre')
-    ticket = TicketModelForm
     body = forms.CharField(
-        label="Description",
+        label="Commentaire",
         required=False,
         widget=forms.Textarea(
             attrs={
@@ -81,10 +80,11 @@ class ReviewModelForm(forms.ModelForm):
             }
         )
     )
-
-    class Meta:
+    rating = forms.IntegerField(label='Note')
+    class Meta():
         model = Review
-        fields = ["ticket", "headline", "body", "rating"]
+        fields = ["headline", "rating", "body"]
+        # fields = ["ticket"]
 
 
 class UserFollowsModelForm(forms.ModelForm):

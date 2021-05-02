@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, view_test
 
 app_name = "reviews"
 
@@ -18,9 +18,13 @@ urlpatterns = [
     path('tickets/<int:id>/update/', views.TicketUpdateView.as_view(), name='ticket-update'),
     path('tickets/<int:id>/delete/', views.TicketDeleteView.as_view(), name='ticket-delete'),
 
-    path('reviews/create/', views.ReviewCreateView.as_view(), name='review-create'),
+    # path('reviews/create/', views.ReviewCreateView.as_view(), name='review-create'),
+    path('reviews/create/', views.create_new_ticket_review_view, name='review-create'),
 
     path("own_posts/", views.own_posts_view, name="own-posts"),
     path("user_follows/", views.user_follows_view, name="user-follows"),
+    path("multiforms/", view_test.MultiformCreateView.as_view(), name="multiform"),
+
+
 
 ]

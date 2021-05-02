@@ -3,7 +3,7 @@
 	<h1>Je suis {{user}}</h1>
 	<form action='.' method='POST'>
         {% csrf_token %}
-		<input type="text" name="will_follow_user" value="Nom d'utilisateur">
+		<input type="text" name="will_follow_user" placeholder="Nom d'utilisateur">
         <input type='submit' value='Envoyer' />
 
 		<div class="container py-5">

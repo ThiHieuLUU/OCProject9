@@ -1,4 +1,5 @@
 {% extends 'reviews/header.html' %}
+{% load static %}
 {% block content %}
 	<button><a href="{% url 'reviews:ticket-create' %}">Demander une critique</a></button>
 	<button><a href="{% url 'reviews:review-create' %}">Créer une critique</a></button>

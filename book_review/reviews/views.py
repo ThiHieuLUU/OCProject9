@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
+from django.template.context_processors import csrf
+
 from .forms import NewUserForm, MyAuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages  # import messages
 from django.contrib.auth.forms import AuthenticationForm  # add this
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -47,7 +51,6 @@ def home_view(request):
 def flux_view(request):
     user = request.user
     ls = user.tickets.all()
-
     return render(request, "reviews/flux.html", {"ls": ls})
 
 
@@ -84,7 +87,23 @@ def feed_view(request):
         key=lambda post: post.time_created,
         reverse=True
     )
+    if request.method == "POST":
+        if 'create_review' in request.POST:
+            post_id = request.POST.get('create_review') # post is a ticket
+            # ticket = Ticket.objects.get(id=post_id)
+            # review_form = ReviewModelForm()
+            # _kwargs = {"ticket_id": post_id, "post": ticket, "has_ticket": True, "review_form": review_form}
+            request.session["ticket_id"] = post_id
+            # request.session["ticket"] = ticket
+            request.session["has_already_ticket"] = True
+            # request.session["review_form"] = review_form
+
+            return redirect("reviews:review-create")
     return render(request, "reviews/flux.html", context={'posts': posts})
+
+# if 'bar' in request.session:
+#     del request.session['bar']
+
 
 
 def own_posts_view(request):
@@ -113,14 +132,15 @@ def own_posts_view(request):
                 request.user.tickets.get(id=_id).delete()
                 messages.success(request, f"Vous avez supprimé la demande de critique {title}")
             # WHY DON'T WORK ?
-            # if "REVIEW" in post_value:
-            #     _id = int(post_value[len("REVIEW"):])  # The rest of string
-            #     print("id =", _id)
-            #     # request.user.reviews.get(id=_id).delete()
-            #     ticket = request.user.reviews.all()[_id].ticket
-            #     request.user.reviews.all()[_id].delete()
-            #     messages.success(request, f"Vous avez supprimé la critique pour {ticket}")
-            # return redirect("reviews:own-posts")
+            if "REVIEW" in post_value:
+                _id = int(post_value[len("REVIEW"):])  # The rest of string
+                print("id =", _id)
+                # # request.user.reviews.get(id=_id).delete()
+                ticket = Review.objects.get(id=_id).ticket
+                # request.user.reviews.all()[_id].delete()
+                Review.objects.get(id=_id).delete()
+                messages.success(request, f"Vous avez supprimé la critique {ticket} ")
+            return redirect("reviews:own-posts")
 
     return render(request, "reviews/own_posts.html", context={'posts': posts})
 
@@ -147,7 +167,6 @@ def user_follows_view(request):
             UserFollows.delete_user_follows(user, followed_user_name)
             messages.success(request, f"Vous avez désabonné le {followed_user_name}")
             return redirect("reviews:user-follows")
-
     form = UserFollowsModelForm()
     user = request.user
     following_users = get_following_users(user)
@@ -213,3 +232,52 @@ class ReviewCreateView(CreateView):
         form.instance.user = self.request.user  # To add logged user as attribute "user" of Ticket
 
         return super().form_valid(form)
+
+
+def create_new_ticket_review_view(request):
+    if request.method == "POST":
+        if request.POST.get("new_ticket_review") == "new_ticket_review":
+            ticket_form = TicketModelForm(request.POST)
+            review_form = ReviewModelForm(request.POST)
+            user = request.user
+            if ticket_form.is_valid() and review_form.is_valid():
+                print(ticket_form)
+                ticket = ticket_form.save(False)
+                ticket.user = user
+                ticket.save() # Pb with image
+
+                review = review_form.save(False)
+                review.ticket = ticket
+                review.user = user
+                review.save()
+                return redirect("reviews:own-posts")
+        if "already_ticket" in request.POST:
+            ticket_id = request.POST.get("already_ticket")
+            ticket = Ticket.objects.get(id=ticket_id)
+            review_form = ReviewModelForm(request.POST)
+            user = request.user
+            if review_form.is_valid():
+                review = review_form.save(False)
+                review.ticket = ticket
+                review.user = user
+                review.save()
+                return redirect("reviews:own-posts")
+    context = {}
+    context.update(csrf(request))
+    review_form = ReviewModelForm()
+    context["review_form"] = review_form
+    if request.session.get("has_already_ticket"):
+        ticket_id = request.session.get("ticket_id")
+        ticket = Ticket.objects.get(id=ticket_id)
+        has_ticket = True
+        context["has_ticket"] = has_ticket
+        context["post"] = ticket
+        del request.session["has_already_ticket"]
+        del request.session["ticket_id"]
+    else:
+        ticket_form = TicketModelForm()
+        context["ticket_form"] = ticket_form
+        has_ticket = False
+        context["has_ticket"] = has_ticket
+    return render(request, "reviews/review_create.html", context=context)
+

@@ -1,16 +1,14 @@
 
 <div class="container-fluid p-0">
     <div class="border border-primary">
-        {% if post.user == user %}
-            <p>Vous avez publié un ticket - {{post.time_created}}</p>
-        {% else %}
-            <p>{{post.user}} a publié un ticket - {{post.time_created}}</p>
-        {% endif %}
-        <p>{{post.title}}</p>
-        <p>{{post.description}}</p>
-        <img src="{{post.image.url}}">
+        {% include 'reviews/includes/ticket_info_snippet.html' %}
+
         {% if not post.reviews.all %}
-            <button><a href="{% url 'reviews:review-create' %}">Créer une critique</a></button>
+            <form action="." method="POST">
+                {% csrf_token %}
+<!--                <a href="{% url 'reviews:review-create' %}">-->
+                <button type="submit" name="create_review" value="{{post.id}}">Créer une critique</button>
+            </form>
         {% endif %}
     </div>
 </div>
