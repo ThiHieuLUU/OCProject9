@@ -90,20 +90,10 @@ def feed_view(request):
     if request.method == "POST":
         if 'create_review' in request.POST:
             post_id = request.POST.get('create_review') # post is a ticket
-            # ticket = Ticket.objects.get(id=post_id)
-            # review_form = ReviewModelForm()
-            # _kwargs = {"ticket_id": post_id, "post": ticket, "has_ticket": True, "review_form": review_form}
             request.session["ticket_id"] = post_id
-            # request.session["ticket"] = ticket
             request.session["has_already_ticket"] = True
-            # request.session["review_form"] = review_form
-
             return redirect("reviews:review-create")
     return render(request, "reviews/flux.html", context={'posts': posts})
-
-# if 'bar' in request.session:
-#     del request.session['bar']
-
 
 
 def own_posts_view(request):
@@ -178,47 +168,38 @@ def user_follows_view(request):
 class TicketCreateView(CreateView):
     template_name = 'tickets/ticket_create.html'
     form_class = TicketModelForm
-    queryset = Ticket.objects.all()  # <blog>/<modelname>_list.html
-
-    # success_url = '/'
+    queryset = Ticket.objects.all()
 
     def form_valid(self, form):
         form.instance.user = self.request.user  # To add logged user as attribute "user" of Ticket
         return super().form_valid(form)
 
 
+class TicketListView(ListView):
+    template_name = 'tickets/ticket_list.html'
+    queryset = Ticket.objects.all()
+
+
 class TicketDetailView(DetailView):
     template_name = 'tickets/ticket_detail.html'
-
-    # queryset = Article.objects.all()
-
-    def get_object(self):
-        id_ = self.kwargs.get("id")
-        return get_object_or_404(Ticket, id=id_)
+    queryset = Ticket.objects.all()
 
 
 class TicketUpdateView(UpdateView):
     template_name = 'tickets/ticket_create.html'
     form_class = TicketModelForm
-
-    def get_object(self):
-        id_ = self.kwargs.get("id")
-        return get_object_or_404(Ticket, id=id_)
+    queryset = Ticket.objects.all()
 
     def form_valid(self, form):
-        print(form.cleaned_data)
         return super().form_valid(form)
 
 
 class TicketDeleteView(DeleteView):
     template_name = 'tickets/ticket_delete.html'
-
-    def get_object(self):
-        id_ = self.kwargs.get("id")
-        return get_object_or_404(Ticket, id=id_)
+    queryset = Ticket.objects.all()
 
     def get_success_url(self):
-        return reverse('tickets:ticket-list')
+        return reverse('reviews:ticket-list')
 
 
 class ReviewCreateView(CreateView):

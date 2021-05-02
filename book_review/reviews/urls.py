@@ -14,9 +14,10 @@ urlpatterns = [
 
 
     path('tickets/create/', views.TicketCreateView.as_view(), name='ticket-create'),
-    path('tickets/<int:id>/', views.TicketDetailView.as_view(), name='ticket-detail'),
-    path('tickets/<int:id>/update/', views.TicketUpdateView.as_view(), name='ticket-update'),
-    path('tickets/<int:id>/delete/', views.TicketDeleteView.as_view(), name='ticket-delete'),
+    path('tickets/list/', views.TicketListView.as_view(), name='ticket-list'),
+    path('tickets/<int:pk>/', views.TicketDetailView.as_view(), name='ticket-detail'),
+    path('tickets/<int:pk>/update/', views.TicketUpdateView.as_view(), name='ticket-update'),
+    path('tickets/<int:pk>/delete/', views.TicketDeleteView.as_view(), name='ticket-delete'),
 
     # path('reviews/create/', views.ReviewCreateView.as_view(), name='review-create'),
     path('reviews/create/', views.create_new_ticket_review_view, name='review-create'),

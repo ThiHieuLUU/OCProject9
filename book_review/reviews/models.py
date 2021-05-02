@@ -29,7 +29,8 @@ class Ticket(models.Model):
         return f'{self.title} (créé par {self.user})'
 
     def get_absolute_url(self):
-        return reverse("reviews:ticket-detail", kwargs={"id": self.id})
+        # return reverse("reviews:ticket-detail", kwargs={"id": self.id})
+        return reverse("reviews:ticket-detail",  kwargs={"pk": self.id})
 
 
 class Review(models.Model):
