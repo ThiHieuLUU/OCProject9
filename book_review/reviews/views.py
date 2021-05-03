@@ -209,7 +209,6 @@ class ReviewCreateView(CreateView):
 
         return super().form_valid(form)
 
-
 def create_new_ticket_review_view(request):
     if request.method == "POST":
         if request.POST.get("new_ticket_review") == "new_ticket_review":
@@ -220,7 +219,7 @@ def create_new_ticket_review_view(request):
                 print(ticket_form)
                 ticket = ticket_form.save(False)
                 ticket.user = user
-                ticket.save()  # Pb with image
+                ticket.save() # Pb with image
 
                 review = review_form.save(False)
                 review.ticket = ticket
