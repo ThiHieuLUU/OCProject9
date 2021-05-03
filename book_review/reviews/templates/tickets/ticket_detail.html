@@ -1,13 +1,17 @@
 {% extends 'reviews/header.html' %}
 {% block content %}
-    <h1>Ticket créée par {{ object.user }}</h1>
-    <p> Vous avez publié :</p>
-    {{ form.media }}
-    <h1>{{ object.title }}</h1>
-    <p>{{ object.description }}</p>
-    <img src="{{object.image.url}}">
-    <br/>
-    <br/>
+    {% with post=object %}
+        <div class="container py-5">
+            <div class="border border-primary">
+                <h4 class="text-center">Détail du ticket</h4>
+                <div class="container py-5 w-75" ALIGN='center'>
+                    <div class="border border-primary" >
+                        <p>{{post.user}} a demandé une critique <span class="badge badge-default float-right m-2">{{post.time_created}}</span></p>
+                        {% include 'reviews/includes/ticket_info_snippet.html' %}
+                     </div>
+                </div>
+            </div>
+        </div>
+    {% endwith %}
     {{object.body|safe}}
-    <button>Créer une critique </button>
 {% endblock %}

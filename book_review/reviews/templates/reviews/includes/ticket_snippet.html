@@ -1,14 +1,26 @@
 
-<div class="container-fluid p-0">
+<!--<div class="container-fluid p-0">-->
+<div class="container py-5">
     <div class="border border-primary">
+        {% if post.user == user %}
+            <p>Vous avez demandé une critique <span class="badge badge-default float-right m-2">{{post.time_created}}</span></p>
+        {% else %}
+            <p>{{post.user}} a demandé une critique <span class="badge badge-default float-right m-2">{{post.time_created}}</span></p>
+        {% endif %}
         {% include 'reviews/includes/ticket_info_snippet.html' %}
 
         {% if not post.reviews.all %}
             <form action="." method="POST">
                 {% csrf_token %}
-<!--                <a href="{% url 'reviews:review-create' %}">-->
-                <button type="submit" name="create_review" value="{{post.id}}">Créer une critique</button>
+                <div class="row">
+                    <div class="col text-center">
+                        <button  class="btn btn-primary" type="submit" name="create_review" value="{{post.id}}">Créer une critique</button>
+                    </div>
+                </div>
             </form>
         {% endif %}
+        <br>
+        <br>
+
     </div>
 </div>

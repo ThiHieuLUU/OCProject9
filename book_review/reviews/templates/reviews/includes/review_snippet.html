@@ -1,21 +1,19 @@
 <div class="container-fluid p-0">
     <div class="border border-primary">
-        <div class="border border-primary">
-            {% if post.user == user %}
-                {% if post.ticket.user == user %}
-                    <p>Vous avez publié une critique pour répondre à VOTRE ticket : {{post.ticket.title}}, {{post.time_created}}</p>
-                {% else %}
-                    <p>Vous avez publié une critique pour répondre à ticket : {{post.ticket.title}} de {{post.ticket.user}}, {{post.time_created}}</p>
-                {% endif %}
-            {% else %}
-                <p>{{post.user}} a publié une critique pour répondre au ticket {{post.ticket.title}} de {{post.ticket.user}}, {{post.time_created}}</p>
-            {% endif %}
-            {% include 'reviews/includes/review_info_snippet.html' %}
-        </div>
-         <div class="border border-primary">
-             {% with post=post.ticket %}
-                {% include 'reviews/includes/ticket_info_snippet.html' %}
-             {% endwith %}
+        {% if post.user == user %}
+            <p>Vous avez publié une critique <span class="badge badge-default float-right m-2">{{post.time_created}}</span></p>
+        {% else %}
+            <p>{{post.user}} a publié une critique <span class="badge badge-default float-right m-2">{{post.time_created}}</span></p>
+        {% endif %}
+        {% include 'reviews/includes/review_info_snippet.html' %}
+
+        <div class="container py-5 w-75" ALIGN='center'>
+            <div class="border border-primary" >
+                 {% with post=post.ticket %}
+                    <p> Ticket - {{post.user}}</p>
+                    {% include 'reviews/includes/ticket_info_snippet.html' %}
+                 {% endwith %}
+             </div>
          </div>
     </div>
 </div>

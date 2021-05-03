@@ -1,13 +1,12 @@
 {% extends 'reviews/header.html' %}
 {% load static %}
 {% block content %}
-	<button><a href="{% url 'reviews:ticket-create' %}">Demander une critique</a></button>
-	<button><a href="{% url 'reviews:review-create' %}">Créer une critique</a></button>
-
+<div class="container py-5">
+	<div ALIGN='center'>
+		<a class="btn btn-primary" href="{% url 'reviews:ticket-create' %}">Demander une critique</a>
+		<a class="btn btn-primary" href="{% url 'reviews:review-create' %}">Créer une critique</a>
+	</div>
 	<div class="container py-5">
-	<h1>Liste de tickets/critiques les plus récents</h1>
-	<h2>Je suis {{user}}</h2>
-	<h2>Je suis les utilisateurs : {{user.following.all}}</h2>
 
 	{% for post in posts %}
 		{% if post.content_type == 'TICKET' %}
@@ -20,4 +19,5 @@
 
 	{% endfor %}
 	</div>
+</div>
 {% endblock %}

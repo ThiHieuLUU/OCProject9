@@ -1,31 +1,54 @@
 {% extends 'reviews/header.html' %}
 {% block content %}
+{% load crispy_forms_tags %}
+
+<div ALIGN='center'>
+    <h1>Créer une critique</h1>
+</div>
+
 {% if has_ticket %}
     <div class="container py-5">
-        <h1>Créer une critique</h1>
-        <h4>Vous êtes en train de poster en réponse à</h4>
-        {% include 'reviews/includes/ticket_info_snippet.html' %}
-        <h4>Critique</h4>
-        <form action='.' method='POST'>
-                    <p>Critique</p>
-                    {% csrf_token %}
-                    {{ review_form.as_p }}
-                    <button type='submit' name="already_ticket" value="{{post.id}}" >Envoyer</button>
-        </form>
+        <div class="border border-primary">
+            <h4>Vous êtes en train de poster en réponse à</h4>
+            <div class="container py-5 w-75" ALIGN='center'>
+                <div class="border border-primary" >
+                    <p>{{post.user}} a demandé une critique <span class="badge badge-default float-right m-2">{{post.time_created}}</span></p>
+                    {% include 'reviews/includes/ticket_info_snippet.html' %}
+                 </div>
+            </div>
+        <div class="border border-primary">
+            <h4>Critique</h4>
+            <form action='.' method='POST'>
+                {% csrf_token %}
+                <div class="container py-5 w-75">
+                    {{ review_form|crispy }}
+                    <button  class="btn btn-primary" type='submit' name="already_ticket" value="{{post.id}}">Envoyer</button>
+                </div>
+            </form>
+            <br>
+            <br>
+        </div>
+
     </div>
 {% else %}
     <div class="container py-5">
-
-    <h1>Créer une critique</h1>
-        <form action='.' method='POST' enctype="multipart/form-data">
-            {% csrf_token %}
-            <h4>Livre / Article</h4>
-            {{ ticket_form.media }}
-            {{ ticket_form.as_p }}
-            <h4>Critique</h4>
-            {{ review_form.as_p }}
-            <button type='submit' name="new_ticket_review" value="new_ticket_review" >Envoyer</button>
-        </form>
+        <div class="border border-primary">
+            <form action='.' method='POST' enctype="multipart/form-data">
+                {% csrf_token %}
+                <h4>Livre / Article</h4>
+                <div class="container py-5 w-75">
+                    {{ ticket_form.media }}
+                    {{ ticket_form|crispy }}
+                </div>
+                <div class="border border-primary">
+                    <h4>Critique</h4>
+                    <div class="container py-5 w-75">
+                        {{ review_form|crispy }}
+                        <button class="btn btn-primary" type='submit' name="new_ticket_review" value="new_ticket_review" >Envoyer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 {% endif %}
 {% endblock %}

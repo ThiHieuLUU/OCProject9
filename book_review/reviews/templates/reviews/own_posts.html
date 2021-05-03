@@ -1,19 +1,19 @@
 {% extends 'reviews/header.html' %}
 {% block content %}
 	<div class="container py-5">
-
-			<h1>Liste de mes posts</h1>
+			<h1 class="text-center">Vos posts</h1>
 			{% for post in posts %}
 				<div class="border border-primary">
 					<form action='.' method='POST'>
 						{% csrf_token %}
 						{% if post.content_type == 'TICKET' %}
-							{% include 'reviews/includes/ticket_snippet.html' %}
+						    <p> Vous avez publié un ticket <span class="badge badge-default float-right m-2">{{post.time_created}}</span></p>
+							{% include 'reviews/includes/ticket_info_snippet.html' %}
 						{% elif post.content_type == 'REVIEW' %}
 							{% include 'reviews/includes/review_snippet.html' %}
 						{% endif %}
-						<button type="submit" name="deletePost" value='{{post.content_type}}{{post.id}}'>Supprimer</button>
-						<button>Modifier</button>
+						<button class="btn btn-primary" type="submit" name="deletePost" value='{{post.content_type}}{{post.id}}'>Supprimer</button>
+						<button class="btn btn-primary">Modifier</button>
 					</form>
 <!--					<button>Supprimer</button>-->
 					</br>

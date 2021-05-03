@@ -45,7 +45,10 @@ class MyAuthenticationForm(AuthenticationForm):
 
 
 class TicketModelForm(forms.ModelForm):
-    title = forms.CharField(label='Titre')
+    title = forms.CharField(
+        label='Titre',
+        required=False,
+    )
 
     description = forms.CharField(
         label="Description",
@@ -55,8 +58,8 @@ class TicketModelForm(forms.ModelForm):
                 # "placeholder": "Your description",
                 "class": "new-class-name two",
                 "id": "my-id-for-textarea",
-                "rows": 20,
-                'cols': 120
+                "rows": 5,
+                'cols': 50
             }
         )
     )
@@ -65,9 +68,13 @@ class TicketModelForm(forms.ModelForm):
         model = Ticket
         fields = ["title", "description", "image"]
 
+
 # How to add TicketModelForm in ReviewModelForm  ???
 class ReviewModelForm(forms.ModelForm):
-    headline = forms.CharField(label='Titre')
+    headline = forms.CharField(
+        label='Titre',
+        required=False,
+    )
     body = forms.CharField(
         label="Commentaire",
         required=False,
@@ -75,12 +82,16 @@ class ReviewModelForm(forms.ModelForm):
             attrs={
                 "class": "new-class-name two",
                 "id": "my-id-for-textarea",
-                "rows": 10,
+                "rows": 5,
                 'cols': 50,
             }
         )
     )
-    rating = forms.IntegerField(label='Note')
+    rating = forms.IntegerField(
+        label='Note',
+        required=False,
+    )
+
     class Meta():
         model = Review
         fields = ["headline", "rating", "body"]
