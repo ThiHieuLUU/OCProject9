@@ -6,12 +6,11 @@
 <!--Register-->
 <div class="container py-5 w-50">
     <h2 class="text-center">Inscrivez-vous</h2>
-    <form method="POST" ALIGN='center'>
+    <form action='.' method="POST" ALIGN='center'>
         {% csrf_token %}
         {{ register_form|crispy }}
-        <button><a href="{% url 'reviews:home' %}">Retourner</a></button>
-        <button>S'inscrire</button>
-        <!--		<button class="btn btn-primary" type="submit">Register</button>-->
+        <a class="btn btn-primary" href="{% url 'reviews:home' %}">Retourner</a>
+        <button class="btn btn-primary">S'inscrire</button>
     </form>
 </div>
 

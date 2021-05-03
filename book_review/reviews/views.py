@@ -28,7 +28,7 @@ from .forms import *
 from .models import *
 
 
-def home_view(request):
+def connection_view(request):
     if request.method == "POST":
         form = MyAuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -42,28 +42,22 @@ def home_view(request):
                 messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
         else:
             messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
+
     form = MyAuthenticationForm()
     context = {"login_form": form}
 
-    return render(request=request, template_name='reviews/home.html', context=context)
-
-
-def flux_view(request):
-    user = request.user
-    ls = user.tickets.all()
-    return render(request, "reviews/flux.html", {"ls": ls})
-
+    return render(request=request, template_name='reviews/connection.html', context=context)
 
 def register_view(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            # user = form.save()
             # login(request, user)
             messages.success(request, "Inscription effectuée avec succès")
             return redirect("reviews:home")
         messages.error(request, "Le nom d'utilisateur ou le mot de passe est incorrect.")
-    form = NewUserForm
+    form = NewUserForm()
     return render(request=request, template_name="reviews/register.html", context={"register_form": form})
 
 

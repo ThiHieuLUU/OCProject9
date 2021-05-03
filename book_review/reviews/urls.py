@@ -4,7 +4,7 @@ from . import views, view_test
 app_name = "reviews"
 
 urlpatterns = [
-    path("", views.home_view, name="home"),
+    path("", views.connection_view, name="home"),
     path("register/", views.register_view, name="register"),
     path("logout/", views.logout_view, name="logout"),
     # path("flux/", views.flux_view, name="flux"),
