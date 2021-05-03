@@ -21,6 +21,8 @@ urlpatterns = [
 
     # path('reviews/create/', views.ReviewCreateView.as_view(), name='review-create'),
     path('reviews/create/', views.create_new_ticket_review_view, name='review-create'),
+    path('reviews/list/', views.ReviewListView.as_view(), name='review-list'),
+    path('reviews/<int:pk>/', views.ReviewDetailView.as_view(), name='review-detail'),
 
     path("own_posts/", views.own_posts_view, name="own-posts"),
     path("user_follows/", views.user_follows_view, name="user-follows"),

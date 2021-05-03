@@ -1,12 +1,18 @@
 {% extends 'reviews/header.html' %}
 {% block content %}
-    <h1>Ticket créé par {{ object.user }}</h1>
+    <h1> Reviews créée par {{ object.user }}</h1>
+    <h1> Reviews répondre au ticket de {{ object.ticket.user }}</h1>
+    {% with post=object.ticket %}
+        {% include 'reviews/includes/ticket_info_snippet.html' %}
+    {% endwith %}
     {{ form.media }}
-    <h1>{{ object.title }}</h1>
-    <p>{{ object.description }}</p>
+    <h1>{{ object.ticket.title }}</h1>
+    <h1>{{ object.headline }}</h1>
+    <h1>{{ object.body }}</h1>
+    <p>{{ object.rating}}</p>
     <img src="{{object.image.url}}">
     <br/>
     <br/>
     {{object.body|safe}}
-    <button>Créer une critique </button>
+<!--    <button>Créer une critique </button>-->
 {% endblock %}

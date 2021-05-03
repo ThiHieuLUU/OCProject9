@@ -1,23 +1,21 @@
 <div class="container-fluid p-0">
     <div class="border border-primary">
-        {% if post.user == user %}
-            {% if post.ticket.user == user %}
-                <p>Vous avez publié une critique pour répondre à VOTRE ticket : {{post.ticket.title}}, {{post.time_created}}</p>
+        <div class="border border-primary">
+            {% if post.user == user %}
+                {% if post.ticket.user == user %}
+                    <p>Vous avez publié une critique pour répondre à VOTRE ticket : {{post.ticket.title}}, {{post.time_created}}</p>
+                {% else %}
+                    <p>Vous avez publié une critique pour répondre à ticket : {{post.ticket.title}} de {{post.ticket.user}}, {{post.time_created}}</p>
+                {% endif %}
             {% else %}
-                <p>Vous avez publié une critique pour répondre à ticket : {{post.ticket.title}} de {{post.ticket.user}}, {{post.time_created}}</p>
+                <p>{{post.user}} a publié une critique pour répondre au ticket {{post.ticket.title}} de {{post.ticket.user}}, {{post.time_created}}</p>
             {% endif %}
-        {% else %}
-            <p>{{post.user}} a publié une critique pour répondre au ticket {{post.ticket.title}} de {{post.ticket.user}}, {{post.time_created}}</p>
-        {% endif %}
-        <p>{{post.headline}} - Note : {{post.rating}}</p>
-        <p>{{post.body}}</p>
-         <div class="border">
-            <p>Ticket de {{post.ticket.user}}</p>
-            <p>{{post.ticket.title}}</p>
-            <p>{{post.ticket.description}}</p>
-            {% if post.ticket.image %}
-                <img src="{{post.ticket.image.url}}">
-            {% endif %}
+            {% include 'reviews/includes/review_info_snippet.html' %}
+        </div>
+         <div class="border border-primary">
+             {% with post=post.ticket %}
+                {% include 'reviews/includes/ticket_info_snippet.html' %}
+             {% endwith %}
          </div>
     </div>
 </div>

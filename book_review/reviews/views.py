@@ -262,3 +262,29 @@ def create_new_ticket_review_view(request):
         context["has_ticket"] = has_ticket
     return render(request, "reviews/review_create.html", context=context)
 
+class ReviewListView(ListView):
+    template_name = 'reviews/review_list.html'
+    queryset = Review.objects.all()
+#
+#
+class ReviewDetailView(DetailView):
+    template_name = 'reviews/review_detail.html'
+    queryset = Review.objects.all()
+#
+#
+# class TicketUpdateView(UpdateView):
+#     template_name = 'tickets/ticket_create.html'
+#     form_class = TicketModelForm
+#     queryset = Ticket.objects.all()
+#
+#     def form_valid(self, form):
+#         return super().form_valid(form)
+#
+#
+# class TicketDeleteView(DeleteView):
+#     template_name = 'tickets/ticket_delete.html'
+#     queryset = Ticket.objects.all()
+#
+#     def get_success_url(self):
+#         return reverse('reviews:ticket-list')
+

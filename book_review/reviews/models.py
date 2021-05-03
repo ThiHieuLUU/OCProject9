@@ -53,7 +53,7 @@ class Review(models.Model):
             return f'{self.user} a créé une critique sur {self.headline}'
 
     def get_absolute_url(self):
-        return reverse("reviews:ticket-detail", kwargs={"id": self.id})
+        return reverse("reviews:review-detail", kwargs={"pk": self.id})
 
 
 class UserFollows(models.Model):
