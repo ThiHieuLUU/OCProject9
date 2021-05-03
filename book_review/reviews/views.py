@@ -37,7 +37,7 @@ def connection_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("reviews:flux")
+                return redirect("reviews:home")
             else:
                 messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
         else:
@@ -48,6 +48,7 @@ def connection_view(request):
 
     return render(request=request, template_name='reviews/connection.html', context=context)
 
+
 def register_view(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
@@ -55,7 +56,7 @@ def register_view(request):
             # user = form.save()
             # login(request, user)
             messages.success(request, "Inscription effectuée avec succès")
-            return redirect("reviews:home")
+            return redirect("reviews:connection")
         messages.error(request, "Le nom d'utilisateur ou le mot de passe est incorrect.")
     form = NewUserForm()
     return render(request=request, template_name="reviews/register.html", context={"register_form": form})
@@ -63,10 +64,10 @@ def register_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("reviews:home")
+    return redirect("reviews:connection")
 
 
-def feed_view(request):
+def home_view(request):
     reviews = get_users_viewable_reviews(request.user)
     # returns queryset of reviews
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
@@ -83,11 +84,11 @@ def feed_view(request):
     )
     if request.method == "POST":
         if 'create_review' in request.POST:
-            post_id = request.POST.get('create_review') # post is a ticket
+            post_id = request.POST.get('create_review')  # post is a ticket
             request.session["ticket_id"] = post_id
             request.session["has_already_ticket"] = True
             return redirect("reviews:review-create")
-    return render(request, "reviews/flux.html", context={'posts': posts})
+    return render(request, "reviews/home.html", context={'posts': posts})
 
 
 def own_posts_view(request):
@@ -219,7 +220,7 @@ def create_new_ticket_review_view(request):
                 print(ticket_form)
                 ticket = ticket_form.save(False)
                 ticket.user = user
-                ticket.save() # Pb with image
+                ticket.save()  # Pb with image
 
                 review = review_form.save(False)
                 review.ticket = ticket
@@ -256,10 +257,11 @@ def create_new_ticket_review_view(request):
         context["has_ticket"] = has_ticket
     return render(request, "reviews/review_create.html", context=context)
 
+
 class ReviewListView(ListView):
     template_name = 'reviews/review_list.html'
     queryset = Review.objects.all()
-#
+
 #
 class ReviewDetailView(DetailView):
     template_name = 'reviews/review_detail.html'
@@ -281,4 +283,3 @@ class ReviewDetailView(DetailView):
 #
 #     def get_success_url(self):
 #         return reverse('reviews:ticket-list')
-

@@ -9,7 +9,7 @@
     <form action='.' method="POST" ALIGN='center'>
         {% csrf_token %}
         {{ register_form|crispy }}
-        <a class="btn btn-primary" href="{% url 'reviews:home' %}">Retourner</a>
+        <a class="btn btn-primary" href="{% url 'reviews:connection' %}">Retourner</a>
         <button class="btn btn-primary">S'inscrire</button>
     </form>
 </div>

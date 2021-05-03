@@ -4,11 +4,11 @@ from . import views, view_test
 app_name = "reviews"
 
 urlpatterns = [
-    path("", views.connection_view, name="home"),
+    path("", views.connection_view, name="connection"),
     path("register/", views.register_view, name="register"),
     path("logout/", views.logout_view, name="logout"),
     # path("flux/", views.flux_view, name="flux"),
-    path("flux/", views.feed_view, name="flux"),
+    path("home/", views.home_view, name="home"),
     # path("<int:id>", views.index, name="index"),
 
 
@@ -27,7 +27,5 @@ urlpatterns = [
     path("own_posts/", views.own_posts_view, name="own-posts"),
     path("user_follows/", views.user_follows_view, name="user-follows"),
     path("multiforms/", view_test.MultiformCreateView.as_view(), name="multiform"),
-
-
 
 ]
