@@ -1,18 +1,26 @@
 {% extends 'reviews/header.html' %}
 {% block content %}
-    <h1> Reviews créée par {{ object.user }}</h1>
-    <h1> Reviews répondre au ticket de {{ object.ticket.user }}</h1>
-    {% with post=object.ticket %}
-        {% include 'reviews/includes/ticket_info_snippet.html' %}
-    {% endwith %}
-    {{ form.media }}
-    <h1>{{ object.ticket.title }}</h1>
-    <h1>{{ object.headline }}</h1>
-    <h1>{{ object.body }}</h1>
-    <p>{{ object.rating}}</p>
-    <img src="{{object.image.url}}">
-    <br/>
-    <br/>
-    {{object.body|safe}}
-<!--    <button>Créer une critique </button>-->
+
+{% with post=object %}
+<div class="container py-5">
+    <h4 class="text-center">Détail de la critique</h4>
+
+    <div class="border border-primary">
+        <p>{{post.user}} a publié une critique <span
+                class="badge badge-default float-right m-2">{{post.time_created}}</span></p>
+        {% include 'reviews/includes/review_info_snippet.html' %}
+
+        {% with post=object.ticket %}
+        <div class="container py-5 w-75" ALIGN='center'>
+            <div class="border border-primary">
+                <p>{{post.user}} a publié un ticket <span class="badge badge-default float-right m-2">{{post.time_created}}</span>
+                </p>
+                {% include 'reviews/includes/ticket_info_snippet.html' %}
+            </div>
+        </div>
+        {% endwith %}
+    </div>
+</div>
+{% endwith %}
+<!--{{object.body|safe}}-->
 {% endblock %}

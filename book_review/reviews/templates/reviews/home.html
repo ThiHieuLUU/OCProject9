@@ -2,22 +2,20 @@
 {% load static %}
 {% block content %}
 <div class="container py-5">
-	<div ALIGN='center'>
-		<a class="btn btn-primary" href="{% url 'reviews:ticket-create' %}">Demander une critique</a>
-		<a class="btn btn-primary" href="{% url 'reviews:review-create' %}">Créer une critique</a>
-	</div>
-	<div class="container py-5">
-
-	{% for post in posts %}
-		{% if post.content_type == 'TICKET' %}
+    <div ALIGN='center'>
+        <a class="btn btn-primary" href="{% url 'reviews:ticket-create' %}">Demander une critique</a>
+        <a class="btn btn-primary" href="{% url 'reviews:review-create' %}">Créer une critique</a>
+    </div>
+    <div class="container py-5">
+        {% for post in posts %}
+			{% if post.content_type == 'TICKET' %}
 			{% include 'reviews/includes/ticket_snippet.html' %}
-		{% elif post.content_type == 'REVIEW' %}
+			{% elif post.content_type == 'REVIEW' %}
 			{% include 'reviews/includes/review_snippet.html' %}
-		{% endif %}
-		</br>
-		</br>
-
-	{% endfor %}
-	</div>
+			{% endif %}
+        </br>
+        </br>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

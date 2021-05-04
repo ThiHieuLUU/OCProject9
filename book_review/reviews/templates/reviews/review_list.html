@@ -1,6 +1,7 @@
 {% extends 'reviews/header.html' %}
 {% block content %}
+     <h4>Liste de vos critiques</h4>
      {% for instance in object_list %}
-          <p>{{ instance.id }} - <a href='{{ instance.get_absolute_url }}'>{{ instance.headline }}</a></p>
+          <p>{{ forloop.counter }} - <a href='{{ instance.get_absolute_url }}'>{{ instance.headline }}</a></p>
      {% endfor %}
 {% endblock %}
