@@ -169,6 +169,10 @@ class TicketCreateView(CreateView):
         form.instance.user = self.request.user  # To add logged user as attribute "user" of Ticket
         return super().form_valid(form)
 
+    def get_success_url(self):
+        # return reverse('reviews:review-list')
+        return reverse('reviews:home')
+
 
 class TicketListView(ListView):
     template_name = 'tickets/ticket_list.html'
@@ -217,7 +221,7 @@ class ReviewCreateView(CreateView):
 def create_new_ticket_review_view(request):
     if request.method == "POST":
         if request.POST.get("new_ticket_review") == "new_ticket_review":
-            ticket_form = TicketModelForm(request.POST)
+            ticket_form = TicketModelForm(request.POST, request.FILES)
             review_form = ReviewModelForm(request.POST)
             user = request.user
             if ticket_form.is_valid() and review_form.is_valid():
@@ -230,7 +234,7 @@ def create_new_ticket_review_view(request):
                 review.ticket = ticket
                 review.user = user
                 review.save()
-                return redirect("reviews:own-posts")
+                return redirect("reviews:home")
         if "already_ticket" in request.POST:
             ticket_id = request.POST.get("already_ticket")
             ticket = Ticket.objects.get(id=ticket_id)
@@ -241,7 +245,7 @@ def create_new_ticket_review_view(request):
                 review.ticket = ticket
                 review.user = user
                 review.save()
-                return redirect("reviews:own-posts")
+                return redirect("reviews:home")
     context = {}
     context.update(csrf(request))
     review_form = ReviewModelForm()
@@ -273,12 +277,15 @@ class ReviewDetailView(DetailView):
 
 
 class ReviewUpdateView(UpdateView):
-    template_name = 'reviews/review_create.html'
+    template_name = 'reviews/review_update.html'
     form_class = ReviewModelForm
     queryset = Review.objects.all()
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('reviews:own-posts')
 
 
 class ReviewDeleteView(DeleteView):
