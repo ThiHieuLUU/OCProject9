@@ -1,25 +1,51 @@
 {% extends 'reviews/header.html' %}
 {% block content %}
-	<h1>Je suis {{user}}</h1>
-	<form action='.' method='POST'>
-        {% csrf_token %}
-		<input type="text" name="will_follow_user" placeholder="Nom d'utilisateur">
-        <input type='submit' value='Envoyer' />
+<div class="container py-5">
+    <div class="border border-primary">
+        <div class="container py-5 w-75">
 
-		<div class="container py-5">
-			<h1>Abonnements</h1>
-			{% for following_user in following_users %}
-			<ul>
-				<li>{{following_user}} <button type="submit" name="unfollow" value='{{following_user}}'>Desabonner</button></li>
-			</ul>
-			{% endfor %}
-			<h1>Abonnés</h1>
-			{% for followed_user in followed_users %}
-			<ul>
-				<li>{{followed_user}}</li>
-			</ul>
-			{% endfor %}
 
-		</div>
-	</form>
+            <form action='.' method='POST' ALIGN='center'>
+                {% csrf_token %}
+ <div class="container py-5 w-50">
+                 <h4 class="text-center">Suivre d'autres utilisateurs</h4>
+
+                <input type="text" name="will_follow_user" placeholder="Nom d'utilisateur">
+                <input class="btn btn-primary" type='submit' value='Envoyer'/>
+
+</div>
+                <div class="container py-5 w-50">
+                     <h4 class="text-center">Abonnements</h4>
+                <table class="table">
+                    <tbody>
+                    {% for following_user in following_users %}
+                    <tr>
+                        <td class="text-center">{{following_user}}</td>
+                        <td class="text-center">
+                            <button type="submit" name="unfollow" value='{{following_user}}'> Desabonner</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+
+
+                <div class="container py-5 w-50">
+                     <h4 class="text-center">Abonnés</h4>
+                <table class="table">
+                    <tbody>
+                                    {% for followed_user in followed_users %}
+
+                    <tr>
+                        <td class="text-center">{{followed_user}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

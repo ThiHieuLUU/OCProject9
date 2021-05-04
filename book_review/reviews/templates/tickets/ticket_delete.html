@@ -2,6 +2,6 @@
 {% block content %}
     <form action='.' method='POST'>{% csrf_token %}
         <h1>Vous voulez supprimer le ticket "{{ object.title }}"?</h1>
-        <p><input type='submit' value='Oui' />  <a href='../'>Annuler</a></p>
+        <p><input type='submit' value='Oui' />  <a href="{% url 'reviews:own-posts' %}">Annuler</a></p>
     </form>
 {% endblock %}

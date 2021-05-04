@@ -181,12 +181,15 @@ class TicketDetailView(DetailView):
 
 
 class TicketUpdateView(UpdateView):
-    template_name = 'tickets/ticket_create.html'
+    template_name = 'tickets/ticket_update.html'
     form_class = TicketModelForm
     queryset = Ticket.objects.all()
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('reviews:own-posts')
 
 
 class TicketDeleteView(DeleteView):
@@ -194,7 +197,8 @@ class TicketDeleteView(DeleteView):
     queryset = Ticket.objects.all()
 
     def get_success_url(self):
-        return reverse('reviews:ticket-list')
+        return reverse('reviews:own-posts')
+        # return reverse('reviews:ticket-list')
 
 
 class ReviewCreateView(CreateView):
@@ -282,4 +286,5 @@ class ReviewDeleteView(DeleteView):
     queryset = Review.objects.all()
 
     def get_success_url(self):
-        return reverse('reviews:review-list')
+        # return reverse('reviews:review-list')
+        return reverse('reviews:own-posts')
