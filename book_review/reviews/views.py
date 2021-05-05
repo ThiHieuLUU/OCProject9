@@ -276,18 +276,6 @@ class ReviewDetailView(DetailView):
     queryset = Review.objects.all()
 
 
-class ReviewUpdateView(UpdateView):
-    template_name = 'reviews/review_update.html'
-    form_class = ReviewModelForm
-    queryset = Review.objects.all()
-
-    def form_valid(self, form):
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse('reviews:own-posts')
-
-
 class ReviewDeleteView(DeleteView):
     template_name = 'reviews/review_delete.html'
     queryset = Review.objects.all()
@@ -295,3 +283,65 @@ class ReviewDeleteView(DeleteView):
     def get_success_url(self):
         # return reverse('reviews:review-list')
         return reverse('reviews:own-posts')
+
+
+# class ReviewUpdateView(UpdateView):
+#     template_name = 'reviews/review_update.html'
+#     review_form_class = ReviewModelForm
+#     queryset = Review.objects.all()
+#
+#     def form_valid(self, form):
+#         return super().form_valid(form)
+#
+#     def get_success_url(self):
+#         return reverse('reviews:own-posts')
+
+
+class ReviewUpdateView(UpdateView):
+    # model = User
+    form_class = TicketModelForm
+    second_form_class = ReviewModelForm
+    template_name = 'reviews/review_update.html'
+    queryset = Review.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(ReviewUpdateView, self).get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'form2' not in context:
+            context['form2'] = self.second_form_class(self.request.GET)
+        return context
+
+    def get(self, request, *args, **kwargs):
+        super(ReviewUpdateView, self).get(request, *args, **kwargs)
+        self.object = self.get_object()
+        form = self.form_class(instance=self.object.ticket)
+        form2 = self.second_form_class
+        return self.render_to_response(self.get_context_data(
+            object=self.object, form=form, form2=form2))
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.form_class(request.POST)
+        form2 = self.second_form_class(request.POST)
+
+        if form.is_valid() and form2.is_valid():
+            userdata = form.save(commit=False)
+            # used to set the password, but no longer necesarry
+            userdata.save()
+            employeedata = form2.save(commit=False)
+            employeedata.user = userdata
+            employeedata.save()
+            messages.success(self.request, 'Settings saved successfully')
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return self.render_to_response(
+              self.get_context_data(form=form, form2=form2))
+
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('reviews:own-posts')
+
