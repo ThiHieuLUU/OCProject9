@@ -14,17 +14,10 @@ class NewUserForm(UserCreationForm):
         super(NewUserForm, self).__init__(*args, **kwargs)
         for field_name in self.fields:
             self.fields[field_name].help_text = None
-            self.fields[field_name].widget.attrs['class'] = 'form-control'
             self.fields[field_name].label = ""
         self.fields['username'].widget.attrs['placeholder'] = 'Nom d\'utilisateur'
         self.fields['password1'].widget.attrs['placeholder'] = 'Mot de pass'
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirmer mot de passe'
-
-    def save(self, commit=True):
-        user = super(NewUserForm, self).save(commit=False)
-        if commit:
-            user.save()
-        return user
 
 
 class MyAuthenticationForm(AuthenticationForm):
@@ -36,7 +29,6 @@ class MyAuthenticationForm(AuthenticationForm):
         super(MyAuthenticationForm, self).__init__(*args, **kwargs)
         for field_name in self.fields:
             self.fields[field_name].help_text = None
-            self.fields[field_name].widget.attrs['class'] = 'form-control'
             self.fields[field_name].label = ""
 
         self.base_fields['username'].widget.attrs['placeholder'] = 'Nom d\'utilisateur'

@@ -119,8 +119,9 @@ class UserFollows(models.Model):
     @classmethod
     def add_user_follows(cls, user, will_follow_user_name):
         followed_user = User.objects.get(username=will_follow_user_name)
-        new_user_follows = cls(user=user, followed_user=followed_user)
-        new_user_follows.save()
+        cls.objects.create(user=user, followed_user=followed_user)
+        # new_user_follows = cls(user=user, followed_user=followed_user)
+        # new_user_follows.save()
 
 
     @classmethod

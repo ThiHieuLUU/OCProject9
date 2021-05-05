@@ -44,10 +44,10 @@ def connection_view(request):
                 return redirect("reviews:home")
             else:
                 messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
-        else:
-            messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
+        # else:
+        #     messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
 
-    form = MyAuthenticationForm()
+    form = MyAuthenticationForm(request.POST)
     context = {"login_form": form}
 
     return render(request=request, template_name='reviews/users/connection.html', context=context)
@@ -57,8 +57,6 @@ def register_view(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
-            # user = form.save()
-            # login(request, user)
             messages.success(request, "Inscription effectuée avec succès")
             return redirect("reviews:connection")
         messages.error(request, "Le nom d'utilisateur ou le mot de passe est incorrect.")
@@ -114,19 +112,17 @@ def own_posts_view(request):
     if request.method == "POST":
         if request.POST.get("deletePost"):
             post_value = request.POST.get("deletePost")
-            print(post_value)
             if "TICKET" in post_value:
-                _id = int(post_value[len("TICKET"):])  # The rest of string
-                title = request.user.tickets.get(id=_id).title
-                request.user.tickets.get(id=_id).delete()
-                messages.success(request, f"Vous avez supprimé la demande de critique {title}")
+                ticket_id = int(post_value[len("TICKET"):])  # The rest of string
+                ticket = request.user.tickets.get(id=ticket_id)
+                title = ticket.title
+                ticket.delete()
+                messages.success(request, f"Vous avez supprimé le ticket {title}")
             if "REVIEW" in post_value:
-                _id = int(post_value[len("REVIEW"):])  # The rest of string
-                print("id =", _id)
-                # # request.user.reviews.get(id=_id).delete()
-                ticket = Review.objects.get(id=_id).ticket
-                # request.user.reviews.all()[_id].delete()
-                Review.objects.get(id=_id).delete()
+                review_id = int(post_value[len("REVIEW"):])  # The rest of string
+                review = Review.objects.get(id=review_id)
+                ticket = review.ticket
+                review.delete()
                 messages.success(request, f"Vous avez supprimé la critique {ticket} ")
             return redirect("reviews:own-posts")
 

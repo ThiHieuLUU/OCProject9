@@ -1,0 +1,35 @@
+<!--Review update page-->
+{% extends 'reviews/includes/header.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="container py-5">
+     <h1 class="text-center">Modifier votre critique</h1>
+    <div class="border border-primary">
+        <h4>Vous êtes en train de poster en réponse à</h4>
+        <div class="container py-5 w-75" ALIGN='center'>
+            <div class="border border-primary">
+                {% with post=object.ticket %}
+                <p>{{post.user}} a demandé une critique <span class="badge badge-default float-right m-2">{{post.time_created}}</span>
+                </p>
+                {% include 'reviews/includes/ticket_info_snippet.html' %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="border border-primary">
+            <h4>Critique</h4>
+            <form action='.' method='POST'>
+                {% csrf_token %}
+                <div class="container py-5 w-75">
+                    {{ form|crispy }}
+                    <button class="btn btn-primary" type='submit' name="already_ticket" value="{{post.id}}">Envoyer
+                    </button>
+                </div>
+            </form>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

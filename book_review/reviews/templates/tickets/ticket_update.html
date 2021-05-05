@@ -1,0 +1,27 @@
+<!--Ticket update page-->
+{% extends 'reviews/includes/header.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div ALIGN='center'>
+    <h1>Modifier votre ticket</h1>
+</div>
+<div class="container py-5">
+    <div class="border border-primary">
+        <form action='.' method='POST' enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container py-5 w-75">
+                {{ form.title|as_crispy_field }}
+                {{ form.description|as_crispy_field }}
+
+                {% if form.image %}
+                    <img src="{{object.image.url}}">
+                {% endif %}
+
+                 {{ form.image|as_crispy_field }}
+                <button class="btn btn-primary" type='submit'>Envoyer</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

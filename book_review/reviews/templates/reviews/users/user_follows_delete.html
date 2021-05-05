@@ -1,0 +1,8 @@
+<!--User deletion page-->
+{% extends 'reviews/includes/header.html' %}
+{% block content %}
+    <form action='.' method='POST'>{% csrf_token %}
+        <h1>Vous voulez désabonner l'utilisateur "{{ object.followed_user.username }}" ?</h1>
+        <p><input type='submit' value='Oui' />  <a href="{% url 'reviews:user-follows' %}">Annuler</a></p>
+    </form>
+{% endblock %}
