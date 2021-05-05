@@ -1,2 +1,9 @@
-<h4>{{post.headline}} - {{post.rating}}</h4>
+<h4>{{post.headline}} - Note :
+{% with ''|center:post.rating as range %}
+    {% for _ in range %}
+        <span class="fa fa-star"></span>
+    {% endfor %}
+{% endwith %}
+</h4>
+
 <p>{{post.body}}</p>

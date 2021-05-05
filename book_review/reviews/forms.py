@@ -1,3 +1,5 @@
+import choices as choices
+from django.utils.safestring import mark_safe
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
@@ -60,7 +62,42 @@ class TicketModelForm(forms.ModelForm):
         fields = ["title", "description", "image"]
 
 
+class HorizontalRadioRenderer(forms.RadioSelect):
+    def render(self):
+        return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
+
+
+
 class ReviewModelForm(forms.ModelForm):
+    RATING_RANGE = (
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5')
+    )
+
+    # rating = forms.MultipleChoiceField(
+    #     required=False,
+    #     widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-inline'})
+    # )
+
+    rating = forms.ChoiceField(
+        label='Note',
+        required=False,
+        choices=RATING_RANGE,
+    #     # widget=forms.RadioSelect(attrs={
+    #     #     'style': 'display: inline-block'
+    #     # })
+    #     widget=HorizontalRadioRenderer().render()
+    # # forms.RadioSelect(rendHorizontalRadioRenderer)
+    #     # widget=forms.RadioSelect(HorizontalRadioRenderer)
+    #     # # widget=forms.RadioSelect(
+    #     # #     renderer=HorizontalRadioRenderer
+    #     # # ),
+        widget=forms.RadioSelect
+    )
+
     headline = forms.CharField(
         label='Titre',
         required=False,
@@ -77,10 +114,11 @@ class ReviewModelForm(forms.ModelForm):
             }
         )
     )
-    rating = forms.IntegerField(
-        label='Note',
-        required=False,
-    )
+
+    # rating = forms.IntegerField(
+    #     label='Note',
+    #     required=False,
+    # )
 
     class Meta():
         model = Review
