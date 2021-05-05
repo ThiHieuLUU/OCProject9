@@ -50,7 +50,7 @@ def connection_view(request):
     form = MyAuthenticationForm()
     context = {"login_form": form}
 
-    return render(request=request, template_name='reviews/connection.html', context=context)
+    return render(request=request, template_name='reviews/users/connection.html', context=context)
 
 
 def register_view(request):
@@ -63,7 +63,7 @@ def register_view(request):
             return redirect("reviews:connection")
         messages.error(request, "Le nom d'utilisateur ou le mot de passe est incorrect.")
     form = NewUserForm()
-    return render(request=request, template_name="reviews/register.html", context={"register_form": form})
+    return render(request=request, template_name="reviews/users/register.html", context={"register_form": form})
 
 
 def logout_view(request):
@@ -92,7 +92,7 @@ def home_view(request):
             request.session["ticket_id"] = post_id
             request.session["has_already_ticket"] = True
             return redirect("reviews:review-create")
-    return render(request, "reviews/home.html", context={'posts': posts})
+    return render(request, "reviews/users/home.html", context={'posts': posts})
 
 
 def own_posts_view(request):
@@ -130,7 +130,7 @@ def own_posts_view(request):
                 messages.success(request, f"Vous avez supprimé la critique {ticket} ")
             return redirect("reviews:own-posts")
 
-    return render(request, "reviews/own_posts.html", context={'posts': posts})
+    return render(request, "reviews/users/own_posts.html", context={'posts': posts})
 
 
 def user_follows_view(request):
@@ -154,7 +154,7 @@ def user_follows_view(request):
     following_users = UserFollows.get_following_user_follows_from_user(user)
     followed_users = UserFollows.get_followed_user_follows_from_user(user)
     context = {"following_users": following_users, "followed_users": followed_users, "form": form}
-    return render(request, "reviews/user_follows.html", context=context)
+    return render(request, "reviews/users/user_follows.html", context=context)
 
 
 class TicketCreateView(CreateView):
@@ -290,7 +290,7 @@ class ReviewUpdateView(UpdateView):
 
 
 class UserFollowsDeleteView(DeleteView):
-    template_name = 'reviews/user_follows_delete.html'
+    template_name = 'reviews/users/user_follows_delete.html'
     queryset = UserFollows.objects.all()
 
     def get_success_url(self):
