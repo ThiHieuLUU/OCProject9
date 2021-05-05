@@ -1,3 +1,4 @@
+<!--post page-->
 {% extends 'reviews/header.html' %}
 {% block content %}
 <div class="container py-5">
@@ -7,22 +8,21 @@
         <form action='.' method='POST'>
             {% csrf_token %}
             {% if post.content_type == 'TICKET' %}
-            <div class="container py-5">
-                <p> Vous avez publié un ticket <span
-                        class="badge badge-default float-right m-2">{{post.time_created}}</span></p>
-                {% include 'reviews/includes/ticket_info_snippet.html' %}
-                <br>
-                <br>
-                <a class="btn btn-primary" href="{% url 'reviews:ticket-delete' post.pk%}">Supprimer</a>
-                <a class="btn btn-primary" href="{% url 'reviews:ticket-update' post.pk%}">Modifier</a>
-            </div>
-
+                <div class="container py-5">
+                    <p> Vous avez publié un ticket <span
+                            class="badge badge-default float-right m-2">{{post.time_created}}</span></p>
+                    {% include 'reviews/includes/ticket_info_snippet.html' %}
+                    <br>
+                    <br>
+                    <a class="btn btn-primary" href="{% url 'reviews:ticket-delete' post.pk%}">Supprimer</a>
+                    <a class="btn btn-primary" href="{% url 'reviews:ticket-update' post.pk%}">Modifier</a>
+                </div>
             {% elif post.content_type == 'REVIEW' %}
-            {% include 'reviews/includes/review_snippet_without_border.html' %}
-            <div class="container py-5">
-                <a class="btn btn-primary" href="{% url 'reviews:review-delete' post.pk%}">Supprimer</a>
-                <a class="btn btn-primary" href="{% url 'reviews:review-update' post.pk%}">Modifier</a>
-            </div>
+                {% include 'reviews/includes/review_snippet_without_border.html' %}
+                <div class="container py-5">
+                    <a class="btn btn-primary" href="{% url 'reviews:review-delete' post.pk%}">Supprimer</a>
+                    <a class="btn btn-primary" href="{% url 'reviews:review-update' post.pk%}">Modifier</a>
+                </div>
             {% endif %}
         </form>
     </div>

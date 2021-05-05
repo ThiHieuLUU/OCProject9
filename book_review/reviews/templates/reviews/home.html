@@ -1,3 +1,4 @@
+<!--home page-->
 {% extends 'reviews/header.html' %}
 {% load static %}
 {% block content %}
@@ -9,9 +10,9 @@
     <div class="container py-5">
         {% for post in posts %}
 			{% if post.content_type == 'TICKET' %}
-			{% include 'reviews/includes/ticket_snippet.html' %}
+			    {% include 'reviews/includes/ticket_snippet.html' %}
 			{% elif post.content_type == 'REVIEW' %}
-			{% include 'reviews/includes/review_snippet.html' %}
+			    {% include 'reviews/includes/review_snippet.html' %}
 			{% endif %}
         </br>
         </br>

@@ -3,9 +3,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.core.exceptions import ObjectDoesNotExist
 
-# django.contrib.auth.models.User
 
 """ An user:
 - creates many tickets (to request reviews on the different books)
@@ -104,8 +102,6 @@ class Review(models.Model):
 
 
 class UserFollows(models.Model):
-    # Your UserFollows model definition goes here
-    # An user has many UserFollows with an UserFollows containing UserFollows.user/ UserFollows.followed_user
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                              related_name='following')
 

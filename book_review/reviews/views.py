@@ -1,11 +1,13 @@
 from django.shortcuts import redirect
 from django.template.context_processors import csrf
-
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages  # import messages
-
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
+from itertools import chain
+from django.db.models import CharField, Value
 from django.views.generic import (
     CreateView,
     DetailView,
@@ -13,11 +15,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import IntegrityError
 
-from itertools import chain
-from django.db.models import CharField, Value
 
 from .forms import (
     NewUserForm,
@@ -122,7 +120,6 @@ def own_posts_view(request):
                 title = request.user.tickets.get(id=_id).title
                 request.user.tickets.get(id=_id).delete()
                 messages.success(request, f"Vous avez supprimé la demande de critique {title}")
-            # WHY DON'T WORK ?
             if "REVIEW" in post_value:
                 _id = int(post_value[len("REVIEW"):])  # The rest of string
                 print("id =", _id)
@@ -137,7 +134,6 @@ def own_posts_view(request):
 
 
 def user_follows_view(request):
-    # A regarder comment récupérer données
     if request.method == "POST":
         user = request.user
         try:
@@ -155,8 +151,6 @@ def user_follows_view(request):
 
     form = UserFollowsModelForm()
     user = request.user
-    # following_users = get_following_users(user)
-    # followed_users = get_followed_users(user)
     following_users = UserFollows.get_following_user_follows_from_user(user)
     followed_users = UserFollows.get_followed_user_follows_from_user(user)
     context = {"following_users": following_users, "followed_users": followed_users, "form": form}
@@ -173,7 +167,6 @@ class TicketCreateView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        # return reverse('reviews:review-list')
         return reverse('reviews:home')
 
 

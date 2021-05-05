@@ -68,7 +68,6 @@ class TicketModelForm(forms.ModelForm):
         fields = ["title", "description", "image"]
 
 
-# How to add TicketModelForm in ReviewModelForm  ???
 class ReviewModelForm(forms.ModelForm):
     headline = forms.CharField(
         label='Titre',
