@@ -3,48 +3,43 @@
 <div class="container py-5">
     <div class="border border-primary">
         <div class="container py-5 w-75">
-
-
             <form action='.' method='POST' ALIGN='center'>
                 {% csrf_token %}
- <div class="container py-5 w-50">
-                 <h4 class="text-center">Suivre d'autres utilisateurs</h4>
-
-                <input type="text" name="will_follow_user" placeholder="Nom d'utilisateur">
-                <input class="btn btn-primary" type='submit' value='Envoyer'/>
-
-</div>
                 <div class="container py-5 w-50">
-                     <h4 class="text-center">Abonnements</h4>
-                <table class="table">
-                    <tbody>
-                    {% for following_user in following_users %}
-                    <tr>
-                        <td class="text-center">{{following_user.followed_user.username}}</td>
-                        <td class="text-center">
-                            <a class="btn btn-primary" href="{% url 'reviews:user-follows-delete' following_user.pk %}">Désabonner</a>
+                    <h4 class="text-center">Suivre d'autres utilisateurs</h4>
 
-<!--                            <button type="submit" name="unfollow" value='{{following_user}}' > Désabonner</button>-->
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                    <input type="text" name="will_follow_user" placeholder="Nom d'utilisateur">
+                    <input class="btn btn-primary" type='submit' value='Envoyer'/>
                 </div>
 
+                <div class="container py-5 w-50">
+                    <h4 class="text-center">Abonnements</h4>
+                    <table class="table">
+                        <tbody>
+                        {% for following_user in following_users %}
+                        <tr>
+                            <td class="text-center">{{following_user.followed_user.username}}</td>
+                            <td class="text-center">
+                                <a class="btn btn-primary"
+                                   href="{% url 'reviews:user-follows-delete' following_user.pk %}">Désabonner</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
                 <div class="container py-5 w-50">
-                     <h4 class="text-center">Abonnés</h4>
-                <table class="table">
-                    <tbody>
-                                    {% for followed_user in followed_users %}
-
-                    <tr>
-                        <td class="text-center">{{followed_user}}</td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                    <h4 class="text-center">Abonnés</h4>
+                    <table class="table">
+                        <tbody>
+                        {% for followed_user in followed_users %}
+                        <tr>
+                            <td class="text-center">{{followed_user.user.username}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </form>
         </div>

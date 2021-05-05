@@ -2,7 +2,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django import forms
-# from django.forms import ModelForm, TextInput, EmailInput
 from .models import Ticket, Review, UserFollows
 
 
@@ -95,7 +94,6 @@ class ReviewModelForm(forms.ModelForm):
     class Meta():
         model = Review
         fields = ["headline", "rating", "body"]
-        # fields = ["ticket"]
 
 
 class UserFollowsModelForm(forms.ModelForm):

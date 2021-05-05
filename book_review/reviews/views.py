@@ -1,12 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.template.context_processors import csrf
 
-from .forms import NewUserForm, MyAuthenticationForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages  # import messages
-from django.contrib.auth.forms import AuthenticationForm  # add this
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -20,12 +16,22 @@ from django.views.generic import (
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
-from django.contrib.auth.models import User
 from itertools import chain
 from django.db.models import CharField, Value
 
-from .forms import *
-from .models import *
+from .forms import (
+    NewUserForm,
+    MyAuthenticationForm,
+    TicketModelForm,
+    ReviewModelForm,
+    UserFollowsModelForm
+)
+
+from .models import (
+    Ticket,
+    Review,
+    UserFollows
+)
 
 
 def connection_view(request):
@@ -68,11 +74,11 @@ def logout_view(request):
 
 
 def home_view(request):
-    reviews = get_users_viewable_reviews(request.user)
+    reviews = Review.get_users_viewable_reviews(request.user)
     # returns queryset of reviews
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
 
-    tickets = get_users_viewable_tickets(request.user)
+    tickets = Ticket.get_users_viewable_tickets(request.user)
     # returns queryset of tickets
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
 
@@ -92,11 +98,11 @@ def home_view(request):
 
 
 def own_posts_view(request):
-    reviews = get_reviews_posted_by_user(request.user)
+    reviews = Review.get_reviews_posted_by_user(request.user)
     # returns queryset of reviews
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
 
-    tickets = get_tickets_created_by_user(request.user)
+    tickets = Ticket.get_tickets_created_by_user(request.user)
     # returns queryset of tickets
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
 
@@ -147,11 +153,6 @@ def user_follows_view(request):
         else:
             messages.error(request, "Erreur de demande de suivi")
 
-        if request.POST.get("unfollow"):
-            followed_user_name = request.POST.get("unfollow")
-            UserFollows.delete_user_follows(user, followed_user_name)
-            messages.success(request, f"Vous avez désabonné le {followed_user_name}")
-            return redirect("reviews:user-follows")
     form = UserFollowsModelForm()
     user = request.user
     # following_users = get_following_users(user)
@@ -204,15 +205,11 @@ class TicketDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('reviews:own-posts')
-        # return reverse('reviews:ticket-list')
 
 
 class ReviewCreateView(CreateView):
     template_name = 'reviews/review_create.html'
     form_class = ReviewModelForm
-    queryset = Review.objects.all()  # <blog>/<modelname>_list.html
-
-    # success_url = '/'
 
     def form_valid(self, form):
         form.instance.user = self.request.user  # To add logged user as attribute "user" of Ticket
@@ -306,52 +303,3 @@ class UserFollowsDeleteView(DeleteView):
     def get_success_url(self):
         return reverse('reviews:user-follows')
 
-
-# class ReviewUpdateView(UpdateView):
-#     # model = User
-#     form_class = TicketModelForm
-#     second_form_class = ReviewModelForm
-#     template_name = 'reviews/review_update.html'
-#     queryset = Review.objects.all()
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(ReviewUpdateView, self).get_context_data(**kwargs)
-#         if 'form' not in context:
-#             context['form'] = self.form_class(self.request.GET)
-#         if 'form2' not in context:
-#             context['form2'] = self.second_form_class(self.request.GET)
-#         return context
-#
-#     def get(self, request, *args, **kwargs):
-#         super(ReviewUpdateView, self).get(request, *args, **kwargs)
-#         self.object = self.get_object()
-#         form = self.form_class(instance=self.object.ticket)
-#         form2 = self.second_form_class
-#         return self.render_to_response(self.get_context_data(
-#             object=self.object, form=form, form2=form2))
-#
-#     def post(self, request, *args, **kwargs):
-#         self.object = self.get_object()
-#         form = self.form_class(request.POST)
-#         form2 = self.second_form_class(request.POST)
-#
-#         if form.is_valid() and form2.is_valid():
-#             userdata = form.save(commit=False)
-#             # used to set the password, but no longer necesarry
-#             userdata.save()
-#             employeedata = form2.save(commit=False)
-#             employeedata.user = userdata
-#             employeedata.save()
-#             messages.success(self.request, 'Settings saved successfully')
-#             return HttpResponseRedirect(self.get_success_url())
-#         else:
-#             return self.render_to_response(
-#               self.get_context_data(form=form, form2=form2))
-#
-#
-#     def form_valid(self, form):
-#         return super().form_valid(form)
-#
-#     def get_success_url(self):
-#         return reverse('reviews:own-posts')
-#

@@ -29,8 +29,25 @@ class Ticket(models.Model):
         return f'{self.title} (créé par {self.user})'
 
     def get_absolute_url(self):
-        # return reverse("reviews:ticket-detail", kwargs={"id": self.id})
         return reverse("reviews:ticket-detail",  kwargs={"pk": self.id})
+
+    @staticmethod
+    def get_tickets_created_by_user(user):
+        return user.tickets.all()
+
+    @classmethod
+    def get_users_viewable_tickets(cls, user):
+        return cls.get_tickets_created_by_user(user) | cls.get_tickets_created_by_following_user(user)
+
+    @classmethod
+    def get_tickets_created_by_following_user(cls, user):
+        list_of_tickets = User.objects.none()
+        userfollows_followings = user.following.all()  # list of UserFollows objects
+        for userfollow in userfollows_followings:
+            following_user = userfollow.followed_user  # the person who the "user" follows
+            tickets = cls.get_tickets_created_by_user(following_user)
+            list_of_tickets |= tickets
+        return list_of_tickets
 
 
 class Review(models.Model):
@@ -54,6 +71,36 @@ class Review(models.Model):
 
     def get_absolute_url(self):
         return reverse("reviews:review-detail", kwargs={"pk": self.id})
+
+    @staticmethod
+    def get_reviews_posted_by_user(user):
+        return user.reviews.all()
+
+    @staticmethod
+    def get_reviews_related_to_a_ticket(ticket):
+        return ticket.reviews.all()
+
+    @staticmethod
+    def get_reviews_related_to_all_tickets_of_user(user):
+        list_of_reviews = User.objects.none()
+        for ticket in user.tickets.all():
+            list_of_reviews |= ticket.reviews.all()
+        return list_of_reviews
+
+    @classmethod
+    def get_reviews_posted_by_following_user(cls, user):
+        list_of_reviews = User.objects.none()
+        userfollows_followings = user.following.all()  # list of UserFollows objects
+        for userfollow in userfollows_followings:
+            following_user = userfollow.followed_user  # the person who the "user" follows
+            reviews = cls.get_reviews_posted_by_user(following_user)
+            list_of_reviews |= reviews
+        return list_of_reviews
+
+    @classmethod
+    def get_users_viewable_reviews(cls, user):
+        return cls.get_reviews_posted_by_user(user) | cls.get_reviews_posted_by_following_user(
+            user) | cls.get_reviews_related_to_all_tickets_of_user(user)
 
 
 class UserFollows(models.Model):
@@ -79,12 +126,6 @@ class UserFollows(models.Model):
         new_user_follows = cls(user=user, followed_user=followed_user)
         new_user_follows.save()
 
-    @staticmethod
-    def delete_user_follows(user, followed_user_name):
-        all_user_follows = user.following.all()
-        followed_user_names = [obj.followed_user.username for obj in all_user_follows]
-        index = followed_user_names.index(followed_user_name)
-        all_user_follows[index].delete()
 
     @classmethod
     def get_following_user_follows_from_user(cls, user):
@@ -97,61 +138,17 @@ class UserFollows(models.Model):
         return user_follows_list
 
 
-def get_tickets_created_by_user(user):
-    return user.tickets.all()
 
 
-def get_reviews_posted_by_user(user):
-    return user.reviews.all()
 
 
-def get_reviews_related_to_a_ticket(ticket):
-    return ticket.reviews.all()
 
 
-def get_reviews_related_to_all_tickets_of_user(user):
-    list_of_reviews = User.objects.none()
-    for ticket in user.tickets.all():
-        list_of_reviews |= ticket.reviews.all()
-    return list_of_reviews
 
 
-def get_reviews_posted_by_following_user(user):
-    list_of_reviews = User.objects.none()
-    userfollows_followings = user.following.all() # list of UserFollows objects
-    for userfollow in userfollows_followings:
-        following_user = userfollow.followed_user # the person who the "user" follows
-        reviews = get_reviews_posted_by_user(following_user)
-        list_of_reviews |= reviews
-    return list_of_reviews
 
 
-def get_tickets_created_by_following_user(user):
-    list_of_tickets = User.objects.none()
-    userfollows_followings = user.following.all() # list of UserFollows objects
-    for userfollow in userfollows_followings:
-        following_user = userfollow.followed_user # the person who the "user" follows
-        tickets = get_tickets_created_by_user(following_user)
-        list_of_tickets |= tickets
-    return list_of_tickets
 
-
-def get_users_viewable_reviews(user):
-    return get_reviews_posted_by_user(user) | get_reviews_posted_by_following_user(user) | get_reviews_related_to_all_tickets_of_user(user)
-
-
-def get_users_viewable_tickets(user):
-    return get_tickets_created_by_user(user) | get_tickets_created_by_following_user(user)
-
-
-def get_following_users(user):
-    following_users = [user_follow.followed_user for user_follow in user.following.all()]
-    return following_users
-
-
-def get_followed_users(user):
-    followed_users = [user_follow.user for user_follow in user.followed_by.all()]
-    return followed_users
 
 
 
