@@ -154,8 +154,10 @@ def user_follows_view(request):
             return redirect("reviews:user-follows")
     form = UserFollowsModelForm()
     user = request.user
-    following_users = get_following_users(user)
-    followed_users = get_followed_users(user)
+    # following_users = get_following_users(user)
+    # followed_users = get_followed_users(user)
+    following_users = UserFollows.get_following_user_follows_from_user(user)
+    followed_users = UserFollows.get_followed_user_follows_from_user(user)
     context = {"following_users": following_users, "followed_users": followed_users, "form": form}
     return render(request, "reviews/user_follows.html", context=context)
 
@@ -295,6 +297,14 @@ class ReviewUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('reviews:own-posts')
+
+
+class UserFollowsDeleteView(DeleteView):
+    template_name = 'reviews/user_follows_delete.html'
+    queryset = UserFollows.objects.all()
+
+    def get_success_url(self):
+        return reverse('reviews:user-follows')
 
 
 # class ReviewUpdateView(UpdateView):

@@ -86,6 +86,16 @@ class UserFollows(models.Model):
         index = followed_user_names.index(followed_user_name)
         all_user_follows[index].delete()
 
+    @classmethod
+    def get_following_user_follows_from_user(cls, user):
+        user_follows_list = cls.objects.filter(user__username=user.username)
+        return user_follows_list
+
+    @classmethod
+    def get_followed_user_follows_from_user(cls, user):
+        user_follows_list = cls.objects.filter(followed_user__username=user.username)
+        return user_follows_list
+
 
 def get_tickets_created_by_user(user):
     return user.tickets.all()

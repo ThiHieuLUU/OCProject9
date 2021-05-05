@@ -20,9 +20,11 @@
                     <tbody>
                     {% for following_user in following_users %}
                     <tr>
-                        <td class="text-center">{{following_user}}</td>
+                        <td class="text-center">{{following_user.followed_user.username}}</td>
                         <td class="text-center">
-                            <button type="submit" name="unfollow" value='{{following_user}}'> Desabonner</button>
+                            <a class="btn btn-primary" href="{% url 'reviews:user-follows-delete' following_user.pk %}">Désabonner</a>
+
+<!--                            <button type="submit" name="unfollow" value='{{following_user}}' > Désabonner</button>-->
                         </td>
                     </tr>
                     {% endfor %}

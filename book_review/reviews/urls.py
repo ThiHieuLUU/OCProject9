@@ -27,7 +27,8 @@ urlpatterns = [
     path('reviews/<int:pk>/delete/', views.ReviewDeleteView.as_view(), name='review-delete'),
 
     path("own_posts/", views.own_posts_view, name="own-posts"),
+
     path("user_follows/", views.user_follows_view, name="user-follows"),
-    path("multiforms/", view_test.MultiformCreateView.as_view(), name="multiform"),
+    path('user_follows/<int:pk>/delete/', views.UserFollowsDeleteView.as_view(), name='user-follows-delete'),
 
 ]
