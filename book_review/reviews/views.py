@@ -42,14 +42,11 @@ def connection_view(request):
             if user is not None:
                 login(request, user)
                 return redirect("reviews:home")
-            else:
-                messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
-        # else:
-        #     messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
-
-    form = MyAuthenticationForm(request.POST)
+        else:
+            messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
+    else:
+        form = MyAuthenticationForm()
     context = {"login_form": form}
-
     return render(request=request, template_name='reviews/users/connection.html', context=context)
 
 

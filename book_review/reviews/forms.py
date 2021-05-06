@@ -69,6 +69,7 @@ class HorizontalRadioRenderer(forms.RadioSelect):
 
 
 class ReviewModelForm(forms.ModelForm):
+
     RATING_RANGE = (
         ('1', '1'),
         ('2', '2'),
@@ -76,11 +77,6 @@ class ReviewModelForm(forms.ModelForm):
         ('4', '4'),
         ('5', '5')
     )
-
-    # rating = forms.MultipleChoiceField(
-    #     required=False,
-    #     widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-inline'})
-    # )
 
     rating = forms.ChoiceField(
         label='Note',
@@ -97,6 +93,32 @@ class ReviewModelForm(forms.ModelForm):
     #     # # ),
         widget=forms.RadioSelect
     )
+    # rating = forms.MultipleChoiceField(
+    #     required=False,
+    #     widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-inline'})
+    # )
+
+#     rating = forms.CharField(
+#         label='Note',
+#         required=False,
+#         choices=RATING_RANGE,
+#         widget=forms.RadioSelect
+#     #     # widget=forms.RadioSelect(attrs={
+#     #     #     'style': 'display: inline-block'
+#     #     # })
+#     #     widget=HorizontalRadioRenderer().render()
+#     # # forms.RadioSelect(rendHorizontalRadioRenderer)
+#     #     # widget=forms.RadioSelect(HorizontalRadioRenderer)
+#     #     # # widget=forms.RadioSelect(
+#     #     # #     renderer=HorizontalRadioRenderer
+#     #     # # ),
+# #         widget=forms.RadioSelect(choices=RATING_RANGE,
+# # attrs={'class': "list-group list-group-horizontal mx-3"})
+#     )
+
+    # rating = forms.CharField(label='What is your favorite fruit?',
+    #                          widget=forms.RadioSelect(attrs={'class': "list-group list-group-horizontal mx-3"},
+    #                                                   choices=RATING_RANGE))
 
     headline = forms.CharField(
         label='Titre',
