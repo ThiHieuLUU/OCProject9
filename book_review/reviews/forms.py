@@ -1,5 +1,3 @@
-import choices as choices
-from django.utils.safestring import mark_safe
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
@@ -20,6 +18,12 @@ class NewUserForm(UserCreationForm):
         self.fields['username'].widget.attrs['placeholder'] = 'Nom d\'utilisateur'
         self.fields['password1'].widget.attrs['placeholder'] = 'Mot de pass'
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirmer mot de passe'
+
+    def save(self, commit=True):
+        user = super(NewUserForm, self).save(commit=False)
+        if commit:
+            user.save()
+        return user
 
 
 class MyAuthenticationForm(AuthenticationForm):
@@ -62,14 +66,7 @@ class TicketModelForm(forms.ModelForm):
         fields = ["title", "description", "image"]
 
 
-class HorizontalRadioRenderer(forms.RadioSelect):
-    def render(self):
-        return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
-
-
-
 class ReviewModelForm(forms.ModelForm):
-
     RATING_RANGE = (
         ('1', '1'),
         ('2', '2'),
@@ -82,48 +79,14 @@ class ReviewModelForm(forms.ModelForm):
         label='Note',
         required=False,
         choices=RATING_RANGE,
-    #     # widget=forms.RadioSelect(attrs={
-    #     #     'style': 'display: inline-block'
-    #     # })
-    #     widget=HorizontalRadioRenderer().render()
-    # # forms.RadioSelect(rendHorizontalRadioRenderer)
-    #     # widget=forms.RadioSelect(HorizontalRadioRenderer)
-    #     # # widget=forms.RadioSelect(
-    #     # #     renderer=HorizontalRadioRenderer
-    #     # # ),
         widget=forms.RadioSelect
     )
-    # rating = forms.MultipleChoiceField(
-    #     required=False,
-    #     widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-inline'})
-    # )
-
-#     rating = forms.CharField(
-#         label='Note',
-#         required=False,
-#         choices=RATING_RANGE,
-#         widget=forms.RadioSelect
-#     #     # widget=forms.RadioSelect(attrs={
-#     #     #     'style': 'display: inline-block'
-#     #     # })
-#     #     widget=HorizontalRadioRenderer().render()
-#     # # forms.RadioSelect(rendHorizontalRadioRenderer)
-#     #     # widget=forms.RadioSelect(HorizontalRadioRenderer)
-#     #     # # widget=forms.RadioSelect(
-#     #     # #     renderer=HorizontalRadioRenderer
-#     #     # # ),
-# #         widget=forms.RadioSelect(choices=RATING_RANGE,
-# # attrs={'class': "list-group list-group-horizontal mx-3"})
-#     )
-
-    # rating = forms.CharField(label='What is your favorite fruit?',
-    #                          widget=forms.RadioSelect(attrs={'class': "list-group list-group-horizontal mx-3"},
-    #                                                   choices=RATING_RANGE))
 
     headline = forms.CharField(
         label='Titre',
         required=False,
     )
+
     body = forms.CharField(
         label="Commentaire",
         required=False,
@@ -136,11 +99,6 @@ class ReviewModelForm(forms.ModelForm):
             }
         )
     )
-
-    # rating = forms.IntegerField(
-    #     label='Note',
-    #     required=False,
-    # )
 
     class Meta():
         model = Review

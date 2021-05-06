@@ -1,3 +1,4 @@
+from itertools import chain
 from django.shortcuts import redirect
 from django.template.context_processors import csrf
 from django.contrib.auth import login, authenticate, logout
@@ -6,7 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-from itertools import chain
+
 from django.db.models import CharField, Value
 from django.views.generic import (
     CreateView,
@@ -43,22 +44,33 @@ def connection_view(request):
                 login(request, user)
                 return redirect("reviews:home")
         else:
-            messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
+            messages.error(
+                request, "Nom d'utilisateur ou mot de passe invalide.")
     else:
         form = MyAuthenticationForm()
     context = {"login_form": form}
-    return render(request=request, template_name='reviews/users/connection.html', context=context)
+    return render(
+        request=request,
+        template_name='reviews/users/connection.html',
+        context=context)
 
 
 def register_view(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
+            form.save()
             messages.success(request, "Inscription effectuée avec succès")
             return redirect("reviews:connection")
-        messages.error(request, "Le nom d'utilisateur ou le mot de passe est incorrect.")
+        messages.error(
+            request,
+            "Le nom d'utilisateur ou le mot de passe est incorrect.")
     form = NewUserForm()
-    return render(request=request, template_name="reviews/users/register.html", context={"register_form": form})
+    return render(
+        request=request,
+        template_name="reviews/users/register.html",
+        context={
+            "register_form": form})
 
 
 def logout_view(request):
@@ -110,20 +122,28 @@ def own_posts_view(request):
         if request.POST.get("deletePost"):
             post_value = request.POST.get("deletePost")
             if "TICKET" in post_value:
-                ticket_id = int(post_value[len("TICKET"):])  # The rest of string
+                # The rest of string
+                ticket_id = int(post_value[len("TICKET"):])
                 ticket = request.user.tickets.get(id=ticket_id)
                 title = ticket.title
                 ticket.delete()
-                messages.success(request, f"Vous avez supprimé le ticket {title}")
+                messages.success(
+                    request, f"Vous avez supprimé le ticket {title}")
             if "REVIEW" in post_value:
-                review_id = int(post_value[len("REVIEW"):])  # The rest of string
+                # The rest of string
+                review_id = int(post_value[len("REVIEW"):])
                 review = Review.objects.get(id=review_id)
                 ticket = review.ticket
                 review.delete()
-                messages.success(request, f"Vous avez supprimé la critique {ticket} ")
+                messages.success(
+                    request, f"Vous avez supprimé la critique {ticket} ")
             return redirect("reviews:own-posts")
 
-    return render(request, "reviews/users/own_posts.html", context={'posts': posts})
+    return render(
+        request,
+        "reviews/users/own_posts.html",
+        context={
+            'posts': posts})
 
 
 def user_follows_view(request):
@@ -146,7 +166,10 @@ def user_follows_view(request):
     user = request.user
     following_users = UserFollows.get_following_user_follows_from_user(user)
     followed_users = UserFollows.get_followed_user_follows_from_user(user)
-    context = {"following_users": following_users, "followed_users": followed_users, "form": form}
+    context = {
+        "following_users": following_users,
+        "followed_users": followed_users,
+        "form": form}
     return render(request, "reviews/users/user_follows.html", context=context)
 
 
@@ -156,7 +179,8 @@ class TicketCreateView(CreateView):
     queryset = Ticket.objects.all()
 
     def form_valid(self, form):
-        form.instance.user = self.request.user  # To add logged user as attribute "user" of Ticket
+        # To add logged user as attribute "user" of Ticket
+        form.instance.user = self.request.user
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -198,7 +222,8 @@ class ReviewCreateView(CreateView):
     form_class = ReviewModelForm
 
     def form_valid(self, form):
-        form.instance.user = self.request.user  # To add logged user as attribute "user" of Ticket
+        # To add logged user as attribute "user" of Ticket
+        form.instance.user = self.request.user
 
         return super().form_valid(form)
 
@@ -288,4 +313,3 @@ class UserFollowsDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('reviews:user-follows')
-
