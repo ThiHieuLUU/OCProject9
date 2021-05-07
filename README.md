@@ -1,7 +1,7 @@
 # Project 9
 ## About the project 9
-This project is realized with Django framework in order to create a website for book review.
-The main goal is to a website which:
+This project is realized with Django framework in order to create an application for book review.
+The main goal of this application is to:
 * Allow users to post theirs requests of reviews about a book or theirs reviews. 
 * Follow the other users.
 ## About main structure
