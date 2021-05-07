@@ -23,11 +23,6 @@ The main goal is to a website which:
 │   └── reviews
 │       ├── admin.py
 │       ├── apps.py
-│       ├── flake8-rapport
-│       │   ├── back.svg
-│       │   ├── file.svg
-│       │   ├── index.html
-│       │   └── styles.css
 │       ├── forms.py
 │       ├── __init__.py
 │       ├── migrations
