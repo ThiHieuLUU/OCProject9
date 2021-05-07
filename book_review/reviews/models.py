@@ -158,7 +158,6 @@ class UserFollows(models.Model):
         followed_user = User.objects.get(username=will_follow_user_name)
         cls.objects.create(user=user, followed_user=followed_user)
 
-
     @classmethod
     def get_following_user_follows_from_user(cls, user):
         """Get all users who the user follows."""

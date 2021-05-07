@@ -126,7 +126,7 @@ class ReviewModelForm(forms.ModelForm):
         )
     )
 
-    class Meta():
+    class Meta:
         model = Review
         fields = ["headline", "rating", "body"]
 
