@@ -19,15 +19,13 @@ The main goal of this application is to:
 │   ├── db.sqlite3
 │   ├── manage.py
 │   ├── media
-│   │   └── images
+│   │   └── images/
 │   └── reviews
 │       ├── admin.py
 │       ├── apps.py
 │       ├── forms.py
 │       ├── __init__.py
-│       ├── migrations
-│       │   ├── 0001_initial.py
-│       │   └── __init__.py
+│       ├── migrations/
 │       ├── models.py
 │       ├── templates
 │       │   ├── reviews
