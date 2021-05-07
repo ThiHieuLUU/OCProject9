@@ -4,7 +4,7 @@ This project is realized with Django framework in order to create a website for 
 The main goal is to a website which:
 * Allow users to post theirs requests of reviews about a book or theirs reviews. 
 * Follow the other users.
-## About main struture
+## About main structure
 * Project: book_review
 * Application: reviews
 ## Code organization
