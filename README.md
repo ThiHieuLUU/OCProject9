@@ -8,7 +8,66 @@ The main goal is to a website which:
 * Project: book_review
 * Application: reviews
 ## Code organization
-
+├── book_review
+│   ├── book_review
+│   │   ├── asgi.py
+│   │   ├── __init__.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   ├── db.sqlite3
+│   ├── manage.py
+│   ├── media
+│   │   └── images
+│   └── reviews
+│       ├── admin.py
+│       ├── apps.py
+│       ├── flake8-rapport
+│       │   ├── back.svg
+│       │   ├── file.svg
+│       │   ├── index.html
+│       │   └── styles.css
+│       ├── forms.py
+│       ├── __init__.py
+│       ├── migrations
+│       │   ├── 0001_initial.py
+│       │   └── __init__.py
+│       ├── models.py
+│       ├── templates
+│       │   ├── reviews
+│       │   │   ├── includes
+│       │   │   │   ├── header.html
+│       │   │   │   ├── messages.html
+│       │   │   │   ├── navbar.html
+│       │   │   │   ├── review_info_snippet.html
+│       │   │   │   ├── review_snippet.html
+│       │   │   │   ├── review_snippet_without_border.html
+│       │   │   │   ├── ticket_info_snippet.html
+│       │   │   │   └── ticket_snippet.html
+│       │   │   ├── review_create.html
+│       │   │   ├── review_delete.html
+│       │   │   ├── review_detail.html
+│       │   │   ├── review_list.html
+│       │   │   ├── review_update.html
+│       │   │   └── users
+│       │   │       ├── connection.html
+│       │   │       ├── home.html
+│       │   │       ├── own_posts.html
+│       │   │       ├── register.html
+│       │   │       ├── user_follows_delete.html
+│       │   │       └── user_follows.html
+│       │   └── tickets
+│       │       ├── ticket_create.html
+│       │       ├── ticket_delete.html
+│       │       ├── ticket_detail.html
+│       │       ├── ticket_list.html
+│       │       └── ticket_update.html
+│       ├── tests.py
+│       ├── urls.py
+│       └── views.py
+├── README.md
+├── requirements.txt
+└── setup.cfg
 
 ## Process
 1. Clone and launch the project:
