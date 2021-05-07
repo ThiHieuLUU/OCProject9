@@ -1,4 +1,17 @@
+#! /usr/bin/venv python3
+# coding: utf-8
+"""Views for book_review project.
+
+Main views:
+- Connection page (for authentication)
+- Registration page (to register the site)
+- Home page (Flux view in the project: all posts of an authenticated user and which of his following users)
+- Posts page (All posts (tickets and reviews) of an authenticated user)
+- Abonnements page (to follow other users and to see who the user follows and who follows the user)
+"""
+
 from itertools import chain
+
 from django.shortcuts import redirect
 from django.template.context_processors import csrf
 from django.contrib.auth import login, authenticate, logout
@@ -7,7 +20,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-
 from django.db.models import CharField, Value
 from django.views.generic import (
     CreateView,
@@ -34,6 +46,8 @@ from .models import (
 
 
 def connection_view(request):
+    """This view is used to login for a user."""
+
     if request.method == "POST":
         form = MyAuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -56,6 +70,8 @@ def connection_view(request):
 
 
 def register_view(request):
+    """This view is used to register the site for a new user."""
+
     if request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
@@ -74,11 +90,18 @@ def register_view(request):
 
 
 def logout_view(request):
+    """This view is used to logout of the site."""
+
     logout(request)
     return redirect("reviews:connection")
 
 
 def home_view(request):
+    """The Home view used after a user is authenticated.
+
+    This view displays all posts (tickets and reviews) related to the user and to his following users.
+    """
+
     reviews = Review.get_users_viewable_reviews(request.user)
     # returns queryset of reviews
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
@@ -103,6 +126,8 @@ def home_view(request):
 
 
 def own_posts_view(request):
+    """The Posts view used to display all posts (tickets and reviews) of the authenticated user."""
+
     reviews = Review.get_reviews_posted_by_user(request.user)
     # returns queryset of reviews
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
@@ -147,6 +172,13 @@ def own_posts_view(request):
 
 
 def user_follows_view(request):
+    """This view corresponds to Abonnement page.
+
+     The user can select an user name of other users to follow him.
+
+     The user can see all users who follows him and all users he follows.
+     """
+
     if request.method == "POST":
         user = request.user
         try:
@@ -174,50 +206,71 @@ def user_follows_view(request):
 
 
 class TicketCreateView(CreateView):
+    """This view is used when the authenticated user wants to create a ticket."""
+
     template_name = 'tickets/ticket_create.html'
     form_class = TicketModelForm
     queryset = Ticket.objects.all()
 
     def form_valid(self, form):
-        # To add logged user as attribute "user" of Ticket
-        form.instance.user = self.request.user
+        """Validate the input for creating a Ticket model."""
+
+        form.instance.user = self.request.user  # To add logged user as the attribute "user" of Ticket
         return super().form_valid(form)
 
     def get_success_url(self):
+        """Redirect to the Home page when the ticket is created with success."""
+
         return reverse('reviews:home')
 
 
 class TicketListView(ListView):
+    """This view is used when the authenticated user wants to see his all tickets."""
+
     template_name = 'tickets/ticket_list.html'
     queryset = Ticket.objects.all()
 
 
 class TicketDetailView(DetailView):
+    """This view is used when the authenticated user wants to see the detail of one of his tickets."""
+
     template_name = 'tickets/ticket_detail.html'
     queryset = Ticket.objects.all()
 
 
 class TicketUpdateView(UpdateView):
+    """This view is used when the authenticated user wants to update/modify one of his tickets."""
+
     template_name = 'tickets/ticket_update.html'
     form_class = TicketModelForm
     queryset = Ticket.objects.all()
 
     def form_valid(self, form):
+        """Validate the updated information for a ticket."""
+
         return super().form_valid(form)
 
     def get_success_url(self):
+        """Redirect to the Posts page when the ticket is updated with success."""
+
         return reverse('reviews:own-posts')
 
 
 class TicketDeleteView(DeleteView):
+    """This view is used when the authenticated user wants to delete one of his tickets."""
+
     template_name = 'tickets/ticket_delete.html'
     queryset = Ticket.objects.all()
 
     def get_success_url(self):
+        """Redirect to the Posts page when the ticket is deleted."""
+
         return reverse('reviews:own-posts')
 
 
 class ReviewCreateView(CreateView):
+    """This view is used when the authenticated user wants to create a ticket."""
+
     template_name = 'reviews/review_create.html'
     form_class = ReviewModelForm
 
@@ -229,6 +282,8 @@ class ReviewCreateView(CreateView):
 
 
 def create_new_ticket_review_view(request):
+    """This view is used when the authenticated user wants to create his own review or reply to a ticket."""
+
     if request.method == "POST":
         if request.POST.get("new_ticket_review") == "new_ticket_review":
             ticket_form = TicketModelForm(request.POST, request.FILES)
@@ -238,7 +293,7 @@ def create_new_ticket_review_view(request):
                 print(ticket_form)
                 ticket = ticket_form.save(False)
                 ticket.user = user
-                ticket.save()  # Pb with image
+                ticket.save()
 
                 review = review_form.save(False)
                 review.ticket = ticket
@@ -277,39 +332,56 @@ def create_new_ticket_review_view(request):
 
 
 class ReviewListView(ListView):
+    """This view is used when the authenticated user wants to see his all reviews."""
+
     template_name = 'reviews/review_list.html'
     queryset = Review.objects.all()
 
 
 class ReviewDetailView(DetailView):
+    """This view is used when the authenticated user wants to see the detail of one of his reviews."""
+
     template_name = 'reviews/review_detail.html'
     queryset = Review.objects.all()
 
 
 class ReviewDeleteView(DeleteView):
+    """This view is used when the authenticated user wants to delete one of his reviews."""
+
     template_name = 'reviews/review_delete.html'
     queryset = Review.objects.all()
 
     def get_success_url(self):
-        # return reverse('reviews:review-list')
+        """Redirect to the Posts page when the review is deleted."""
+
         return reverse('reviews:own-posts')
 
 
 class ReviewUpdateView(UpdateView):
+    """This view is used when the authenticated user wants to update/modify one of his reviews."""
+
     template_name = 'reviews/review_update.html'
     form_class = ReviewModelForm
     queryset = Review.objects.all()
 
     def form_valid(self, form):
+        """Validate the update information for a review."""
+
         return super().form_valid(form)
 
     def get_success_url(self):
+        """Redirect to the Posts page when the review is updated with success."""
+
         return reverse('reviews:own-posts')
 
 
 class UserFollowsDeleteView(DeleteView):
+    """This view is used when the authenticated user wants to delete one of his following users."""
+
     template_name = 'reviews/users/user_follows_delete.html'
     queryset = UserFollows.objects.all()
 
     def get_success_url(self):
+        """Redirect to the Abonnements page when the following user is removed."""
+
         return reverse('reviews:user-follows')
