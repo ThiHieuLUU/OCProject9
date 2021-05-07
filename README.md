@@ -8,6 +8,7 @@ The main goal is to a website which:
 * Project: book_review
 * Application: reviews
 ## Code organization
+```
 ├── book_review
 │   ├── book_review
 │   │   ├── asgi.py
@@ -68,6 +69,7 @@ The main goal is to a website which:
 ├── README.md
 ├── requirements.txt
 └── setup.cfg
+```
 
 ## Process
 1. Clone and launch the project:
