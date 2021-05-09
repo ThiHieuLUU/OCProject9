@@ -29,7 +29,6 @@ from django.views.generic import (
     DeleteView
 )
 
-
 from .forms import (
     NewUserForm,
     MyAuthenticationForm,
@@ -266,19 +265,6 @@ class TicketDeleteView(DeleteView):
         """Redirect to the Posts page when the ticket is deleted."""
 
         return reverse('reviews:own-posts')
-
-
-class ReviewCreateView(CreateView):
-    """This view is used when the authenticated user wants to create a ticket."""
-
-    template_name = 'reviews/review_create.html'
-    form_class = ReviewModelForm
-
-    def form_valid(self, form):
-        # To add logged user as attribute "user" of Ticket
-        form.instance.user = self.request.user
-
-        return super().form_valid(form)
 
 
 def create_new_ticket_review_view(request):
