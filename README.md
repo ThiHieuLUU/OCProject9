@@ -79,6 +79,7 @@ cd book_review/
 python manage.py runserver
 ```
 Then go to http://127.0.0.1:8000/ and navigate the application: create an account, login, do CRUD with tickets/reviews, follow other users, etc.
+
 2. Check code with flake8
 * See flake8 configuration in "setup.cfg" file.
 * Check code in reviews application
